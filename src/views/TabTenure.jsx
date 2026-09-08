@@ -16,7 +16,7 @@ export default function TabTenure({ data, isDark = false }) {
 
   // Chart 33: Loan Count
   const chart33Option = buildBarOption({
-    labels: tenureData.map(t => `${t.tenure}M`),
+    labels: tenureData.map(t => `${t.cohort || t.tenure}M`),
     series: [{
       name: 'Loans Funded',
       data: tenureData.map(t => t.loans),
@@ -28,7 +28,7 @@ export default function TabTenure({ data, isDark = false }) {
 
   // Chart 34: Disbursed
   const chart34Option = buildBarOption({
-    labels: tenureData.map(t => `${t.tenure}M`),
+    labels: tenureData.map(t => `${t.cohort || t.tenure}M`),
     series: [{
       name: 'Disbursed Capital',
       data: tenureData.map(t => t.disbursed),
@@ -48,11 +48,11 @@ export default function TabTenure({ data, isDark = false }) {
       textStyle: { color: colors.tooltipText, fontSize: 12 },
       formatter: (p) => `<b>${p[0].name} Tenure</b><br/>Net Profit: <b>${formatINR(p[0].value)}</b>`
     },
-    grid: { top: 25, left: '4%', right: '4%', bottom: '10%', containLabel: true },
+    grid: { top: 25, left: '4%', right: '4%', bottom: 35, containLabel: true },
     xAxis: {
       type: 'category',
-      data: tenureData.map(t => `${t.tenure}M`),
-      axisLabel: { color: colors.textColor, fontSize: 11 },
+      data: tenureData.map(t => `${t.cohort || t.tenure}M`),
+      axisLabel: { color: colors.textColor, fontSize: 10, interval: 0 },
       axisLine: { lineStyle: { color: colors.gridLineColor } }
     },
     yAxis: {
@@ -75,7 +75,7 @@ export default function TabTenure({ data, isDark = false }) {
 
   // Chart 36: Ann Net Return
   const chart36Option = buildLineOption({
-    labels: tenureData.map(t => `${t.tenure}M`),
+    labels: tenureData.map(t => `${t.cohort || t.tenure}M`),
     series: [{
       name: 'Annualized Net Return (%)',
       data: tenureData.map(t => t.ann_net_pct),
@@ -90,7 +90,7 @@ export default function TabTenure({ data, isDark = false }) {
 
   // Chart 37: Ann NPA Rate
   const chart37Option = buildLineOption({
-    labels: tenureData.map(t => `${t.tenure}M`),
+    labels: tenureData.map(t => `${t.cohort || t.tenure}M`),
     series: [{
       name: 'Annualized NPA Rate (%)',
       data: tenureData.map(t => t.ann_npa_pct),
@@ -105,7 +105,7 @@ export default function TabTenure({ data, isDark = false }) {
 
   // Chart 38: Raw vs Ann Return
   const chart38Option = buildBarOption({
-    labels: tenureData.map(t => `${t.tenure}M`),
+    labels: tenureData.map(t => `${t.cohort || t.tenure}M`),
     series: [
       { name: 'Raw Return (%)', data: tenureData.map(t => t.tenure_net_pct), color: colors.indigo },
       { name: 'Annualized Return (%)', data: tenureData.map(t => t.ann_net_pct), color: colors.emerald }
@@ -163,7 +163,7 @@ export default function TabTenure({ data, isDark = false }) {
 
   // Chart 41: Fee Friction by Tenure
   const chart41Option = buildBarOption({
-    labels: tenureData.map(t => `${t.tenure}M`),
+    labels: tenureData.map(t => `${t.cohort || t.tenure}M`),
     series: [{
       name: 'Fee Share (% of Interest)',
       data: tenureData.map(t => Number(((t.platform_fee / Math.max(t.interest_received, 1)) * 100).toFixed(1))),
@@ -176,10 +176,10 @@ export default function TabTenure({ data, isDark = false }) {
 
   // Chart 42: Duration Weighted Return
   const chart42Option = buildBarOption({
-    labels: tenureData.map(t => `${t.tenure}M`),
+    labels: tenureData.map(t => `${t.cohort || t.tenure}M`),
     series: [{
       name: 'Capital Velocity Multiplier',
-      data: tenureData.map(t => Number((12 / t.tenure).toFixed(1))),
+      data: tenureData.map(t => Number((12 / Number(t.cohort || t.tenure)).toFixed(1))),
       color: colors.emerald
     }],
     isDark,

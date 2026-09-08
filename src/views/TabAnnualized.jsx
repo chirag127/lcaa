@@ -13,7 +13,7 @@ export default function TabAnnualized({ data }) {
 
   // Chart 11: Tenure Raw vs Annualized Return
   const chart11Data = {
-    labels: tenureData.map(t => `${t.tenure}M`),
+    labels: tenureData.map(t => `${t.cohort || t.tenure}M`),
     datasets: [
       { label: 'Raw Tenure Net Return (%)', data: tenureData.map(t => t.tenure_net_pct), backgroundColor: THEME_COLORS.indigo },
       { label: 'Annualized Net Return (%)', data: tenureData.map(t => t.ann_net_pct), backgroundColor: THEME_COLORS.emerald }
@@ -22,7 +22,7 @@ export default function TabAnnualized({ data }) {
 
   // Chart 12: Tenure Raw vs Annualized NPA
   const chart12Data = {
-    labels: tenureData.map(t => `${t.tenure}M`),
+    labels: tenureData.map(t => `${t.cohort || t.tenure}M`),
     datasets: [
       { label: 'Raw Tenure NPA (%)', data: tenureData.map(t => t.tenure_npa_pct), backgroundColor: THEME_COLORS.amber },
       { label: 'Annualized NPA (%)', data: tenureData.map(t => t.ann_npa_pct), backgroundColor: THEME_COLORS.crimson }
@@ -49,7 +49,7 @@ export default function TabAnnualized({ data }) {
 
   // Chart 15: Ticket Size Raw vs Annualized Return
   const chart15Data = {
-    labels: amtData.map(a => a.tier),
+    labels: amtData.map(a => a.cohort || a.tier),
     datasets: [
       { label: 'Raw Net Return (%)', data: amtData.map(a => a.tenure_net_pct), backgroundColor: THEME_COLORS.cyan },
       { label: 'Annualized Net Return (%)', data: amtData.map(a => a.ann_net_pct), backgroundColor: THEME_COLORS.emerald }
@@ -58,7 +58,7 @@ export default function TabAnnualized({ data }) {
 
   // Chart 16: Ticket Size Raw vs Annualized NPA
   const chart16Data = {
-    labels: amtData.map(a => a.tier),
+    labels: amtData.map(a => a.cohort || a.tier),
     datasets: [
       { label: 'Raw NPA (%)', data: amtData.map(a => a.tenure_npa_pct), backgroundColor: THEME_COLORS.amber },
       { label: 'Annualized NPA (%)', data: amtData.map(a => a.ann_npa_pct), backgroundColor: THEME_COLORS.crimson }
@@ -67,7 +67,7 @@ export default function TabAnnualized({ data }) {
 
   // Chart 17: APR Tiers Raw vs Annualized Return
   const chart17Data = {
-    labels: rateData.map(r => r.tier),
+    labels: rateData.map(r => r.cohort || r.tier),
     datasets: [
       { label: 'Raw Net Return (%)', data: rateData.map(r => r.tenure_net_pct), backgroundColor: THEME_COLORS.indigo },
       { label: 'Annualized Net Return (%)', data: rateData.map(r => r.ann_net_pct), backgroundColor: THEME_COLORS.emerald }
@@ -76,7 +76,7 @@ export default function TabAnnualized({ data }) {
 
   // Chart 18: Platform Fees Raw vs Annualized Drag
   const chart18Data = {
-    labels: tenureData.map(t => `${t.tenure}M`),
+    labels: tenureData.map(t => `${t.cohort || t.tenure}M`),
     datasets: [
       { label: 'Raw Fee Drag (%)', data: tenureData.map(t => t.tenure_fee_pct), backgroundColor: THEME_COLORS.amber },
       { label: 'Annualized Fee Drag (%)', data: tenureData.map(t => t.ann_fee_pct), backgroundColor: THEME_COLORS.purple }

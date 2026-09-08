@@ -15,7 +15,7 @@ export default function TabRates({ data, isDark = false }) {
 
   // Chart 53: Loan Count
   const chart53Option = buildBarOption({
-    labels: rateData.map(r => r.tier),
+    labels: rateData.map(r => r.cohort || r.tier),
     series: [{ name: 'Loans Funded', data: rateData.map(r => r.loans), color: colors.cyan }],
     isDark,
     yAxisName: 'Loans'
@@ -23,7 +23,7 @@ export default function TabRates({ data, isDark = false }) {
 
   // Chart 54: Disbursed Capital
   const chart54Option = buildBarOption({
-    labels: rateData.map(r => r.tier),
+    labels: rateData.map(r => r.cohort || r.tier),
     series: [{ name: 'Disbursed Capital', data: rateData.map(r => r.disbursed), color: colors.indigo }],
     isDark,
     yAxisName: 'Capital (₹)',
@@ -39,11 +39,11 @@ export default function TabRates({ data, isDark = false }) {
       textStyle: { color: colors.tooltipText, fontSize: 12 },
       formatter: (p) => `<b>${p[0].name} APR</b><br/>Net Profit: <b>₹${Number(p[0].value).toLocaleString()}</b>`
     },
-    grid: { top: 25, left: '4%', right: '4%', bottom: '10%', containLabel: true },
+    grid: { top: 25, left: '4%', right: '4%', bottom: 35, containLabel: true },
     xAxis: {
       type: 'category',
-      data: rateData.map(r => r.tier),
-      axisLabel: { color: colors.textColor, fontSize: 11 },
+      data: rateData.map(r => r.cohort || r.tier),
+      axisLabel: { color: colors.textColor, fontSize: 10, interval: 0 },
       axisLine: { lineStyle: { color: colors.gridLineColor } }
     },
     yAxis: {
@@ -73,11 +73,11 @@ export default function TabRates({ data, isDark = false }) {
       textStyle: { color: colors.tooltipText, fontSize: 12 },
       formatter: (p) => `<b>${p[0].name} APR</b><br/>Ann. Return: <b>${p[0].value}%</b>`
     },
-    grid: { top: 25, left: '4%', right: '4%', bottom: '10%', containLabel: true },
+    grid: { top: 25, left: '4%', right: '4%', bottom: 35, containLabel: true },
     xAxis: {
       type: 'category',
-      data: rateData.map(r => r.tier),
-      axisLabel: { color: colors.textColor, fontSize: 11 },
+      data: rateData.map(r => r.cohort || r.tier),
+      axisLabel: { color: colors.textColor, fontSize: 10, interval: 0 },
       axisLine: { lineStyle: { color: colors.gridLineColor } }
     },
     yAxis: {
@@ -100,7 +100,7 @@ export default function TabRates({ data, isDark = false }) {
 
   // Chart 57: Annualized NPA Rate
   const chart57Option = buildLineOption({
-    labels: rateData.map(r => r.tier),
+    labels: rateData.map(r => r.cohort || r.tier),
     series: [{
       name: 'Annualized NPA Rate (%)',
       data: rateData.map(r => r.ann_npa_pct),
@@ -115,7 +115,7 @@ export default function TabRates({ data, isDark = false }) {
 
   // Chart 58: Contractual APR vs Realized Net Return
   const chart58Option = buildLineOption({
-    labels: rateData.map(r => r.tier),
+    labels: rateData.map(r => r.cohort || r.tier),
     series: [
       { name: 'Contractual APR (%)', data: [36.0, 42.0, 45.0, 47.0, 48.0], color: colors.amber, fill: false },
       { name: 'Realized Net Return (%)', data: rateData.map(r => r.ann_net_pct), color: colors.emerald, fill: false }
@@ -127,7 +127,7 @@ export default function TabRates({ data, isDark = false }) {
 
   // Chart 59: Platform Fee Friction %
   const chart59Option = buildBarOption({
-    labels: rateData.map(r => r.tier),
+    labels: rateData.map(r => r.cohort || r.tier),
     series: [{
       name: 'Fees Paid (% of Interest)',
       data: rateData.map(r => Number(((r.platform_fee / Math.max(r.interest_received, 1)) * 100).toFixed(1))),
@@ -140,7 +140,7 @@ export default function TabRates({ data, isDark = false }) {
 
   // Chart 60: Net Spread
   const chart60Option = buildLineOption({
-    labels: rateData.map(r => r.tier),
+    labels: rateData.map(r => r.cohort || r.tier),
     series: [{
       name: 'Net Spread (Return - NPA)',
       data: rateData.map(r => Number((r.ann_net_pct - r.ann_npa_pct).toFixed(2))),
@@ -155,7 +155,7 @@ export default function TabRates({ data, isDark = false }) {
 
   // Chart 61: Capital Recovery Rate %
   const chart61Option = buildLineOption({
-    labels: rateData.map(r => r.tier),
+    labels: rateData.map(r => r.cohort || r.tier),
     series: [{
       name: 'Principal Recovery Rate (%)',
       data: rateData.map(r => Number(((r.principal_received / r.disbursed) * 100).toFixed(1))),
@@ -169,7 +169,7 @@ export default function TabRates({ data, isDark = false }) {
 
   // Chart 62: Raw Return vs Annualized Return
   const chart62Option = buildBarOption({
-    labels: rateData.map(r => r.tier),
+    labels: rateData.map(r => r.cohort || r.tier),
     series: [
       { name: 'Raw Margin (%)', data: rateData.map(r => r.tenure_net_pct), color: colors.indigo },
       { name: 'Annualized Return (%)', data: rateData.map(r => r.ann_net_pct), color: colors.emerald }
