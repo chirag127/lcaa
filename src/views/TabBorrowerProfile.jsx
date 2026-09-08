@@ -418,8 +418,8 @@ export default function TabBorrowerProfile({ data, isDark = false }) {
         <ChartCard title="Chart B1: Borrower Age Distribution" subtitle="Portfolio age curve — 73% concentrated in 26-40 age brackets." option={chart1Option} />
         <ChartCard title="Chart B2: Age Bracket vs Default Risk" subtitle="Borrowers aged 31-40 show the lowest default rate (4.6-5.1%). Under 26 has lowest margin." option={chart2Option} />
         <ChartCard title="Chart B3: Gender Split" subtitle="Portfolio is 87% male, 13% female — minimal performance difference (5.4% vs 5.3% NPA)." option={chart3Option} />
-        <ChartCard title="Chart B4: Monthly Income vs Default Rate" subtitle="High earners (>₹200k) default at 7.9% — higher than low earners (<₹25k) at 1.2%." option={chart4Option} />
-        <ChartCard title="Chart B5: Income vs Net Margin & NPA Rate" subtitle="₹50k-100k delivers highest net margin (+6.26%). Line strictly on top of bars." option={chart5Option} />
+        <ChartCard title="Chart B4: Monthly Income vs Default Rate" subtitle="Granular 9 brackets: low earners (<₹20k) have 1.86% defaults; high earners (>₹200k) reach 7.9%." option={chart4Option} />
+        <ChartCard title="Chart B5: Income vs Net Margin & NPA Rate" subtitle="Granular analysis: ₹75k–₹100k delivers peak margin (+7.42%). Beyond ₹150k, margins drop to +1.59%." option={chart5Option} />
         <ChartCard title="Chart B6: Salaried vs Self-Employed Volume" subtitle="Salaried dominates volume (81%), but Self-Employed is 4.1x safer (1.5% vs 6.2% NPA)." option={chart6Option} />
         <ChartCard title="Chart B7: Bureau Score (CRIF) vs NPA Rate" subtitle="CRIF score >800 has HIGHEST default rate (9.1%) — bureau score is broken for P2P." option={chart7Option} />
         <ChartCard title="Chart B8: LenDenClub Score vs NPA Rate" subtitle="LDC Score monotonically predicts repayment: 776-800 has 0.0% defaults!" option={chart8Option} />
@@ -431,7 +431,7 @@ export default function TabBorrowerProfile({ data, isDark = false }) {
         <ChartCard title="Chart B14: DPD Delinquency Stage Volume & POS" subtitle="92.9% of loans are at DPD=0. Any loan at DPD>7 suffers severe margin decay." option={chart14Option} />
         <ChartCard title="Chart B15: Contractual APR Distribution & Margin" subtitle="Sweet spot: 46-48% APR delivers highest margin. Sub-40% APR fails platform fee coverage." option={chart15Option} />
         <ChartCard title="Chart B16: Risk Category Filter: AA (Medium) vs A (High)" subtitle="AA (Medium) delivers 1.21% NPA vs 6.81% for A (High). Both lines fully visible on top." option={chart16Option} />
-        <ChartCard title="Chart B17: Borrower Total Loan Amount vs Default Risk" subtitle="Micro-loans ≤₹25,000 carry lowest defaults (4.53%). Jumbo loans >₹1,00,000 suffer 25% defaults!" option={chart17Option} />
+        <ChartCard title="Chart B17: Borrower Total Loan Amount vs Default Risk" subtitle="Granular 9-tier breakdown: ≤₹5k micro loans are safest (2.64% NPA); >₹1L jumbos spike to 25.0% defaults!" option={chart17Option} />
         <ChartCard title="Chart B18: Repayment Infrastructure (NACH Coverage)" subtitle="100% of marketplace loans are collected via NACH auto-debit. Non-filterable in website UI." option={chart18Option} />
       </div>
 
@@ -461,10 +461,10 @@ export default function TabBorrowerProfile({ data, isDark = false }) {
             metrics={[{ label: '>₹200k NPA', value: '7.9%' }, { label: '<₹25k NPA', value: '1.2%' }, { label: 'Paradox Ratio', value: '6.6x Higher' }]}
             directive="MANDATE: Do NOT assume high income equals safety. Cap loan sizes even for high earners."
           />
-          <InsightCard id="B5" type="green" badge="SWEET SPOT" title="Optimal Income: ₹50k-100k Delivers 6.26% Margin"
-            body="Mid-income borrowers (₹50k-100k) deliver the best realized margin of 6.26% with manageable 7.7% NPA. This is your primary target income bracket."
-            metrics={[{ label: 'Loans', value: '1,084' }, { label: 'Margin', value: '6.26%' }, { label: 'NPA', value: '7.7%' }]}
-            directive="MANDATE: Target borrowers in the ₹50k-100k income bracket for highest returns."
+          <InsightCard id="B5" type="green" badge="INCOME ALPHA SWEET SPOT" title="Optimal Income: ₹75k–₹100k Delivers Peak +7.42% Margin"
+            body="Subdividing income into 9 granular brackets reveals that ₹75k–₹100k is the peak profitability zone (+7.42% net margin across 370 loans). The ₹50k–₹75k tier also performs strongly (+5.66%). Beyond ₹150k, margins plunge to +1.59% as overleveraged high earners default at nearly 8%."
+            metrics={[{ label: '₹75k–100k Margin', value: '+7.42%' }, { label: '₹50k–75k Margin', value: '+5.66%' }, { label: '>₹150k Margin', value: '+1.59%' }]}
+            directive="MANDATE: Prioritize borrowers earning ₹50,000–₹100,000/month, with maximum allocation concentrated in ₹75,000–₹100,000."
           />
           <InsightCard id="B6" type="green" badge="COUNTER-INTUITIVE" title="Self-Employed: 4x Safer Than Salaried"
             body={`Self-Employed borrowers have a stunning ${selfData?.npa_pct?.toFixed(1) || '1.5'}% NPA rate vs ${salData?.npa_pct?.toFixed(1) || '6.2'}% for Salaried. Business owners show stronger repayment discipline.`}
@@ -521,10 +521,10 @@ export default function TabBorrowerProfile({ data, isDark = false }) {
             metrics={[{ label: 'AA NPA Rate', value: '1.21%' }, { label: 'A NPA Rate', value: '6.81%' }, { label: 'Safety Edge', value: '5.6x Safer' }]}
             directive="MANDATE: In Website Filter, check 'AA (Medium)' first. Only select 'A (High)' if tenure ≤ 4 Months."
           />
-          <InsightCard id="B17" type="red" badge="LOAN AMOUNT FILTER" title="Jumbo Loans (>₹1L) Suffer 25% Default Rate!"
-            body="Borrowers with approved loans >₹1,00,000 have a devastating 25.0% default rate and -13.92% net margin. Conversely, micro-loans ≤₹25,000 have only 4.53% NPA and generate +4.89% net margin."
-            metrics={[{ label: '≤₹25k NPA', value: '4.53%' }, { label: '>₹1L NPA', value: '25.00%' }, { label: 'Risk Gap', value: '5.5x Higher' }]}
-            directive="MANDATE: In Website Filter, select 'Upto ₹ 25,000'. NEVER select 'More than ₹ 1,00,000'."
+          <InsightCard id="B17" type="red" badge="GRANULAR LOAN AMOUNT TIERS" title="Micro-Tiers (≤₹5k at 2.64% NPA) vs Jumbo Hazard (>₹1L at 25.0% NPA)"
+            body="Granular sub-tiering reveals an escalating risk curve: loans ≤₹5,000 have the lowest default rate (2.64%). The ₹5k–₹15k range delivers peak net margins (+5.5% to +5.8%). Above ₹20,000, defaults surge to ~8–10%, culminating in a catastrophic 25.0% default rate and -13.92% net loss on jumbo loans >₹1,00,000."
+            metrics={[{ label: '≤₹5k NPA', value: '2.64%' }, { label: '₹5k–15k Margin', value: '+5.7%' }, { label: '>₹1L NPA', value: '25.0%' }]}
+            directive="MANDATE: In Website Filter, prioritize 'Upto ₹ 25,000' and avoid loans where approved amount exceeds ₹20,000."
           />
           <InsightCard id="B18" type="info" badge="NON-FILTERABLE ARCHITECTURE" title="Default Repayment Mode: 100% NACH Infrastructure"
             body="LenDenClub automatically routes 100% of loans through bank NACH e-mandates. This is the underlying platform debt-collection rail and cannot be toggled via marketplace UI filters."

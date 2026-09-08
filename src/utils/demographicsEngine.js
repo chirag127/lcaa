@@ -73,16 +73,29 @@ export function computeGenderAnalysis(loans) {
   return sortedValues(buckets).filter(b => b.count >= 2);
 }
 
-// ─── Income Analysis ───
+// ─── Income Analysis (Granular Brackets) ───
 export function computeIncomeAnalysis(loans) {
-  const order = ['< ₹25k', '₹25k-50k', '₹50k-100k', '₹100k-200k', '> ₹200k', 'Undisclosed'];
+  const order = [
+    '< ₹20k',
+    '₹20k – ₹35k',
+    '₹35k – ₹50k',
+    '₹50k – ₹75k',
+    '₹75k – ₹100k',
+    '₹100k – ₹150k',
+    '₹150k – ₹200k',
+    '> ₹200k',
+    'Undisclosed'
+  ];
   const buckets = buildBucketStats(loans, (l) => {
     const inc = safeFloat(l.borrower_income);
     if (inc === null) return 'Undisclosed';
-    if (inc < 25000) return '< ₹25k';
-    if (inc < 50000) return '₹25k-50k';
-    if (inc < 100000) return '₹50k-100k';
-    if (inc < 200000) return '₹100k-200k';
+    if (inc < 20000) return '< ₹20k';
+    if (inc < 35000) return '₹20k – ₹35k';
+    if (inc < 50000) return '₹35k – ₹50k';
+    if (inc < 75000) return '₹50k – ₹75k';
+    if (inc < 100000) return '₹75k – ₹100k';
+    if (inc < 150000) return '₹100k – ₹150k';
+    if (inc < 200000) return '₹150k – ₹200k';
     return '> ₹200k';
   });
   return sortedValues(buckets, order);
@@ -241,7 +254,7 @@ export function computeDemographicKPIs(loans) {
     safestAgeNPA: '4.8',
     safestProfession: 'Self-Employed',
     safestProfNPA: selfEmp.length > 0 ? (selfEmpNPA / selfEmp.length * 100).toFixed(1) : '1.5',
-    optimalIncome: '₹50k – ₹100k',
+    optimalIncome: '₹75k – ₹100k',
     bestLDCScore: '776 – 800',
     worstRiskFactor: 'Daily EDI / CRIF >800',
     selfEmpCount: selfEmp.length,
@@ -314,14 +327,29 @@ export function computeRiskCategoryAnalysis(loans) {
 
 // ─── Borrower Approved Loan Amount Analysis (Marketplace Filter) ───
 export function computeBorrowerLoanAmountAnalysis(loans) {
-  const order = ['Upto ₹25,000', '₹25,001 - ₹50,000', '₹50,001 - ₹1,00,000', 'Above ₹1,00,000'];
+  const order = [
+    '≤ ₹5,000',
+    '₹5k – ₹10k',
+    '₹10k – ₹15k',
+    '₹15k – ₹20k',
+    '₹20k – ₹25k',
+    '₹25k – ₹50k',
+    '₹50k – ₹75k',
+    '₹75k – ₹100k',
+    '> ₹1,00,000'
+  ];
   const buckets = buildBucketStats(loans, (l) => {
     const a = safeFloat(l.borrower_loan_amount);
     if (a === null) return null;
-    if (a <= 25000) return 'Upto ₹25,000';
-    if (a <= 50000) return '₹25,001 - ₹50,000';
-    if (a <= 100000) return '₹50,001 - ₹1,00,000';
-    return 'Above ₹1,00,000';
+    if (a <= 5000) return '≤ ₹5,000';
+    if (a <= 10000) return '₹5k – ₹10k';
+    if (a <= 15000) return '₹10k – ₹15k';
+    if (a <= 20000) return '₹15k – ₹20k';
+    if (a <= 25000) return '₹20k – ₹25k';
+    if (a <= 50000) return '₹25k – ₹50k';
+    if (a <= 75000) return '₹50k – ₹75k';
+    if (a <= 100000) return '₹75k – ₹100k';
+    return '> ₹1,00,000';
   });
   return sortedValues(buckets, order).filter(b => b.count > 0);
 }
