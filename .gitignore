@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# Sensitive data, personal PII and large captures (public repo protection)
+app.lendenclub.com.har
+*.har
+*.xlsx
+*.xls
+*.tmp
+credentials.json
+.env
+.env.*
+
+# Local scratch / test files
+scratch/
+*.log
+borrower_details_master*.json
+all_4000_borrower_details*.json
+user_request_*.txt

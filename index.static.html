@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LenDenClub Portfolio Analytics & Algorithmic Underwriting Engine</title>
+  <meta name="description" content="Complete portfolio analysis of LenDenClub manual lending: 52 interactive charts, 53 insight cards, annualized return modeling, risk heatmaps, website filter blueprint, and real-time loan underwriting simulator.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Top Executive Header -->
+  <header class="header-bar">
+    <div class="brand-container">
+      <div class="brand-logo-icon">LDC</div>
+      <div>
+        <div class="brand-title">LenDenClub Portfolio Analytics & Algorithmic Decision Engine</div>
+        <div class="brand-subtitle">Manual Lending Intelligence Platform &bull; 3,967 Loans Analyzed &bull; ₹2.87M Capital Deployed</div>
+      </div>
+    </div>
+    <div class="header-badges">
+      <div class="badge-pill success"><span>Closed ANR:</span> <strong id="header-anr">16.91%</strong></div>
+      <div class="badge-pill info"><span>Total Lent:</span> <strong id="header-lent">₹28.70 Lakh</strong></div>
+      <div class="badge-pill warning"><span>Active POS:</span> <strong id="header-pos">₹7.39 Lakh</strong></div>
+      <div class="badge-pill danger"><span>NPA Rate:</span> <strong id="header-npa">3.09%</strong></div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <nav class="tabs-nav-wrapper">
+    <ul class="tabs-nav" id="main-tabs">
+      <li><button class="tab-btn active" data-tab="tab-executive">1. Executive Cockpit & Strategy <span class="tab-count">6 Charts</span></button></li>
+      <li><button class="tab-btn" data-tab="tab-annualized">2. Annualized vs Raw Analytics <span class="tab-count">6 Charts</span></button></li>
+      <li><button class="tab-btn" data-tab="tab-scores">3. Credit Score Granular (15 & 20pt) <span class="tab-count">6 Charts</span></button></li>
+      <li><button class="tab-btn" data-tab="tab-tenure">4. Tenure & Duration Dynamics <span class="tab-count">5 Charts</span></button></li>
+      <li><button class="tab-btn" data-tab="tab-tickets">5. Ticket Size & Concentration <span class="tab-count">5 Charts</span></button></li>
+      <li><button class="tab-btn" data-tab="tab-rates">6. Interest Rates & Pricing Traps <span class="tab-count">5 Charts</span></button></li>
+      <li><button class="tab-btn" data-tab="tab-heatmaps">7. 2D Heatmaps & Cross-Cohorts <span class="tab-count">5 Matrices</span></button></li>
+      <li><button class="tab-btn" data-tab="tab-vintages">8. Vintages & Cashflow Lifecycle <span class="tab-count">5 Charts</span></button></li>
+      <li><button class="tab-btn" data-tab="tab-delinquency">9. Delinquency, DPD & Active Risk <span class="tab-count">5 Charts</span></button></li>
+      <li><button class="tab-btn" data-tab="tab-decision">10. Filter Blueprint, Simulator & DB <span class="tab-count">4 Charts + Tool</span></button></li>
+    </ul>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- TAB 1: EXECUTIVE COCKPIT & STRATEGY -->
+    <section id="tab-executive" class="tab-pane active">
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Executive Cockpit & Lending Policy Matrix</h1>
+          <p class="section-subtitle">Macro portfolio overview, capital recovery breakdown, realized net profits, and the empirical lending rulebook.</p>
+        </div>
+      </div>
+
+      <!-- Strategic Rule Banner -->
+      <div class="rule-banner">
+        <div class="rule-box green-zone">
+          <div class="rule-title green">THE GOLDEN RULES: WHAT LOANS TO FUND</div>
+          <ul class="rule-list">
+            <li class="rule-item"><span class="rule-bullet green">&check;</span> <strong>Tenure 2 to 4 Months Only:</strong> Recycles capital 3x to 6x/year. 2M yields +27.39% net annualized return.</li>
+            <li class="rule-item"><span class="rule-bullet green">&check;</span> <strong>Ticket Sizing ₹250 to ₹500 (Max ₹1,000):</strong> Diversifies exposure across hundreds of borrowers. Negligible default impact.</li>
+            <li class="rule-item"><span class="rule-bullet green">&check;</span> <strong>LenDenClub Score ≥ 740 (Sweet spot 745-774):</strong> Delivers >21% to >30% net annualized returns with low default rates.</li>
+            <li class="rule-item"><span class="rule-bullet green">&check;</span> <strong>Monthly Repayments Only:</strong> 95.6% recovery rate, steady salary deduction servicing.</li>
+            <li class="rule-item"><span class="rule-bullet green">&check;</span> <strong>High APR Cushion (44% to 48%+):</strong> Generates wide gross margin that easily covers fees and small defaults.</li>
+          </ul>
+        </div>
+        <div class="rule-box red-zone">
+          <div class="rule-title red">THE BLACKLIST: WHAT LOANS NOT TO FUND</div>
+          <ul class="rule-list">
+            <li class="rule-item"><span class="rule-bullet red">&cross;</span> <strong>NEVER Fund Daily Repayment Loans:</strong> Suffered an alarming 74.22% default rate and -73.19% net return!</li>
+            <li class="rule-item"><span class="rule-bullet red">&cross;</span> <strong>NEVER Fund 12-Month Tenure Loans:</strong> 15.82% default rate, losing capital at -10.79% annualized return.</li>
+            <li class="rule-item"><span class="rule-bullet red">&cross;</span> <strong>AVOID Ticket Sizes > ₹1,000 (₹2,000 - ₹4,000):</strong> A single ₹4,000 default wipes out 16 successful ₹250 loans' profits!</li>
+            <li class="rule-item"><span class="rule-bullet red">&cross;</span> <strong>AVOID 6-Month Tenure Loans:</strong> NPA rate doubles to 7.95% raw (15.9% annualized); return drops to 4.26%.</li>
+            <li class="rule-item"><span class="rule-bullet red">&cross;</span> <strong>AVOID Low APRs (< 44%):</strong> 40-43.9% APR generated barely 1.66% net return after 6% platform fees and defaults.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card" style="--accent-color: var(--color-emerald);">
+          <div class="kpi-label"><span>Total Capital Lent</span> <span>ALL</span></div>
+          <div class="kpi-value" id="kpi-disbursed">₹28,69,500</div>
+          <div class="kpi-meta"><span class="trend-pos">&bull;</span> Across 3,930 funded loans</div>
+        </div>
+        <div class="kpi-card" style="--accent-color: var(--color-cyan);">
+          <div class="kpi-label"><span>Capital Received Back</span> <span>CASH</span></div>
+          <div class="kpi-value" id="kpi-received">₹22,98,672</div>
+          <div class="kpi-meta">Principal: ₹20.42L | Interest: ₹2.57L</div>
+        </div>
+        <div class="kpi-card" style="--accent-color: var(--color-indigo);">
+          <div class="kpi-label"><span>Official Closed ANR</span> <span>LDC CALC</span></div>
+          <div class="kpi-value" id="kpi-closed-anr">16.91%</div>
+          <div class="kpi-meta">Absolute Return: 6.25% on closed book</div>
+        </div>
+        <div class="kpi-card" style="--accent-color: var(--color-amber);">
+          <div class="kpi-label"><span>Active POS Outstanding</span> <span>AT WORK</span></div>
+          <div class="kpi-value" id="kpi-pos">₹7,38,856</div>
+          <div class="kpi-meta">1,385 active loans generating monthly yield</div>
+        </div>
+        <div class="kpi-card" style="--accent-color: var(--color-crimson);">
+          <div class="kpi-label"><span>Total NPA Write-Off</span> <span>DEFAULTS</span></div>
+          <div class="kpi-value" id="kpi-npa">₹88,820</div>
+          <div class="kpi-meta">149 NPA loans (3.09% of total capital)</div>
+        </div>
+        <div class="kpi-card" style="--accent-color: var(--color-purple);">
+          <div class="kpi-label"><span>Net Cash Profit Earned</span> <span>REALIZED</span></div>
+          <div class="kpi-value" id="kpi-profit">₹1,22,117</div>
+          <div class="kpi-meta">Net of ₹45,922 platform fees & NPAs</div>
+        </div>
+      </div>
+
+      <!-- Charts Grid 1: Executive 6 Charts -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 1: Portfolio Capital Allocation & Status Distribution</div>
+              <div class="chart-subtitle">Breakdown of loans across Closed, Active, NPA, and Cancelled/Rejected statuses.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart1"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 2: Net Cashflow Waterfall Decomposition</div>
+              <div class="chart-subtitle">Disbursed vs Principal Recovered, Gross Interest, Platform Fees, NPA Write-off, and Net Profit.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart2"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 3: Realized Net Annualized Return by Tenure</div>
+              <div class="chart-subtitle">Direct comparison of annualized returns across 2M, 3M, 4M, 5M, 6M, and 12M loans.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart3"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 4: Realized Net Annualized Return by Ticket Sizing</div>
+              <div class="chart-subtitle">Impact of loan ticket size (₹250 to ₹4,000) on risk-adjusted profitability.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart4"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 5: Risk vs Return Strategic Quadrant</div>
+              <div class="chart-subtitle">Scatter mapping of cohorts by Annualized NPA % (X-axis) vs Annualized Net Return % (Y-axis).</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart5"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 6: Cumulative Net Cashflow & Wealth Creation Curve</div>
+              <div class="chart-subtitle">Trajectory of cumulative cash received vs cash disbursed over time.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart6"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Insight Cards 1-6 -->
+      <div class="insights-section">
+        <div class="insights-header">
+          <h2 class="insights-title">Executive Action Insights (1 - 6)</h2>
+        </div>
+        <div class="insights-grid">
+          <div class="insight-card verdict-green" id="insight-1"></div>
+          <div class="insight-card verdict-green" id="insight-2"></div>
+          <div class="insight-card verdict-red" id="insight-3"></div>
+          <div class="insight-card verdict-yellow" id="insight-4"></div>
+          <div class="insight-card verdict-red" id="insight-5"></div>
+          <div class="insight-card verdict-green" id="insight-6"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: ANNUALIZED VS RAW TENURE ANALYTICS -->
+    <section id="tab-annualized" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Annualized vs Raw Tenure Analytics</h2>
+          <p class="section-subtitle">Side-by-side comparison of raw tenure returns vs annualized returns (multiplier = 12 / tenure) with dual-line curves.</p>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 7: Dual Line - Raw NPA % vs Annualized NPA % per 20-pt Score Band</div>
+              <div class="chart-subtitle">Comparing raw default rate against annualized default impact across 20-point score intervals.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart7"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 8: Dual Line - Raw Net Return % vs Annualized Net Return % per 20-pt Score Band</div>
+              <div class="chart-subtitle">Visualizing the dramatic compounding uplift achieved through annualization.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart8"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 9: Dual Line - Raw NPA % vs Annualized NPA % per 15-pt Score Band</div>
+              <div class="chart-subtitle">Fine-grained dual-line default curve identifying exact risk spikes at 15-point score increments.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart9"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 10: Dual Line - Raw Net Return % vs Annualized Net Return % per 15-pt Score Band</div>
+              <div class="chart-subtitle">Identifying peak alpha clusters (745-774) with both tenure and annualized lines.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart10"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 11: Capital Turnover & Multiplier Curve across Tenures</div>
+              <div class="chart-subtitle">Annualization multiplier (12/T): 6.0x for 2M, 4.0x for 3M, 3.0x for 4M, down to 1.0x for 12M.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart11"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 12: Dual Bar - Tenure vs Annualized Fee Drag by Tenure</div>
+              <div class="chart-subtitle">How platform fees scale on an annualized basis across loan tenures.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart12"></canvas></div>
+        </div>
+      </div>
+      <div class="insights-section">
+        <div class="insights-header"><h2 class="insights-title">Annualization & Compounding Insights (7 - 12)</h2></div>
+        <div class="insights-grid">
+          <div class="insight-card verdict-green" id="insight-7"></div>
+          <div class="insight-card verdict-green" id="insight-8"></div>
+          <div class="insight-card verdict-green" id="insight-9"></div>
+          <div class="insight-card verdict-red" id="insight-10"></div>
+          <div class="insight-card verdict-yellow" id="insight-11"></div>
+          <div class="insight-card verdict-info" id="insight-12"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: CREDIT SCORE GRANULAR BREAKDOWN -->
+    <section id="tab-scores" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Credit Score Granular Analysis (15-pt & 20-pt Buckets)</h2>
+          <p class="section-subtitle">Deep dive into borrower LenDenClub scores binned in 15-point and 20-point differences to locate optimal lending score ranges.</p>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 13: 20-Point Score Band Capital Deployment & Volume</div>
+              <div class="chart-subtitle">Distribution of loan volume and total capital disbursed across 20-pt buckets.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart13"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 14: 20-Point Score Band NPA Rate (Tenure vs Annualized)</div>
+              <div class="chart-subtitle">Default rates across 700-719, 720-739, 740-759, 760-779, 780-799, and 800+.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart14"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 15: 20-Point Score Band Net Return % (Tenure vs Annualized)</div>
+              <div class="chart-subtitle">Net annualized yields across 20-pt bands highlighting the 740-779 peak return window.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart15"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 16: 15-Point Score Band Capital Distribution</div>
+              <div class="chart-subtitle">Granular volume distribution across 8 discrete 15-point score intervals.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart16"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 17: 15-Point Score Band Annualized NPA Rate %</div>
+              <div class="chart-subtitle">Identifying the high default vulnerability below score 715 and in the 775-789 cluster.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart17"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 18: 15-Point Score Band Net Annualized Return %</div>
+              <div class="chart-subtitle">Demonstrating that the 760-774 band achieves +30.31% net annualized return.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart18"></canvas></div>
+        </div>
+      </div>
+      <div class="insights-section">
+        <div class="insights-header"><h2 class="insights-title">Credit Score Insights (13 - 18)</h2></div>
+        <div class="insights-grid">
+          <div class="insight-card verdict-green" id="insight-13"></div>
+          <div class="insight-card verdict-red" id="insight-14"></div>
+          <div class="insight-card verdict-yellow" id="insight-15"></div>
+          <div class="insight-card verdict-red" id="insight-16"></div>
+          <div class="insight-card verdict-green" id="insight-17"></div>
+          <div class="insight-card verdict-green" id="insight-18"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: TENURE & DURATION DYNAMICS -->
+    <section id="tab-tenure" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Loan Tenure & Duration Dynamics</h2>
+          <p class="section-subtitle">Evaluating loan performance across 2, 3, 4, 5, 6, and 12-month tenures to establish duration policy.</p>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 19: Loan Count and Disbursed Capital by Tenure</div>
+              <div class="chart-subtitle">Volume and rupee allocation across 2M, 3M, 4M, 5M, 6M, and 12M tenures.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart19"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 20: NPA Rate Progression by Tenure (Tenure vs Annualized)</div>
+              <div class="chart-subtitle">How default risk accelerates as loan duration extends from 2 months to 12 months.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart20"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 21: Net Realized Profit (₹) by Tenure</div>
+              <div class="chart-subtitle">Total net profit generated by each tenure cohort after fees and NPA write-offs.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart21"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 22: Annualized Velocity of Capital Turnover by Tenure</div>
+              <div class="chart-subtitle">Number of complete reinvestment cycles achieved per calendar year.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart22"></canvas></div>
+        </div>
+        <div class="chart-card" style="grid-column: span 2;">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 23: Tenure Performance Matrix - Gross Yield vs Net Yield vs NPA Rate</div>
+              <div class="chart-subtitle">Comprehensive tenure comparison showing why 2M-4M is the optimal duration zone.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart23"></canvas></div>
+        </div>
+      </div>
+      <div class="insights-section">
+        <div class="insights-header"><h2 class="insights-title">Tenure & Duration Insights (19 - 23)</h2></div>
+        <div class="insights-grid">
+          <div class="insight-card verdict-green" id="insight-19"></div>
+          <div class="insight-card verdict-green" id="insight-20"></div>
+          <div class="insight-card verdict-yellow" id="insight-21"></div>
+          <div class="insight-card verdict-red" id="insight-22"></div>
+          <div class="insight-card verdict-green" id="insight-23"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: TICKET SIZE & CONCENTRATION RISK -->
+    <section id="tab-tickets" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Loan Ticket Size & Concentration Risk</h2>
+          <p class="section-subtitle">Empirical proof of why retail diversification (₹250-₹1,000) outperforms large loan concentration (₹2,000-₹4,000).</p>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 24: Loan Ticket Size Distribution</div>
+              <div class="chart-subtitle">Breakdown of loans into ₹250, ₹500, ₹750-₹1k, ₹1.25k-₹2k, and ₹2.5k-₹4k.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart24"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 25: Ticket Size vs Annualized NPA Rate %</div>
+              <div class="chart-subtitle">Why loans above ₹1,000 suffered a 41.46% annualized default rate.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart25"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 26: Ticket Size vs Annualized Net Return %</div>
+              <div class="chart-subtitle">Comparison of net yield across ticket sizes: ₹250 (+18.5%) vs ₹1,250-₹2,000 (-14.18%).</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart26"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 27: Average Loss Impact per Default by Ticket Size</div>
+              <div class="chart-subtitle">Severity of capital loss per single default event across ticket categories.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart27"></canvas></div>
+        </div>
+        <div class="chart-card" style="grid-column: span 2;">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 28: Total Rupee Profit Contribution vs Rupee NPA Loss by Ticket Size</div>
+              <div class="chart-subtitle">Net value created by small ticket loans vs value erased by large ticket loans.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart28"></canvas></div>
+        </div>
+      </div>
+      <div class="insights-section">
+        <div class="insights-header"><h2 class="insights-title">Ticket Sizing Insights (24 - 28)</h2></div>
+        <div class="insights-grid">
+          <div class="insight-card verdict-green" id="insight-24"></div>
+          <div class="insight-card verdict-red" id="insight-25"></div>
+          <div class="insight-card verdict-red" id="insight-26"></div>
+          <div class="insight-card verdict-yellow" id="insight-27"></div>
+          <div class="insight-card verdict-green" id="insight-28"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: INTEREST RATES & PRICING TRAPS -->
+    <section id="tab-rates" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Interest Rate & Pricing Elasticity</h2>
+          <p class="section-subtitle">Evaluating borrower APR distribution, contractual rate vs realized net return, and fee friction.</p>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 29: Contractual APR Distribution across Portfolio</div>
+              <div class="chart-subtitle">Frequency distribution of loan interest rates from 18% to 58.2% APR.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart29"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 30: Contractual APR vs Realized Net Annualized Return %</div>
+              <div class="chart-subtitle">Realized return across rate tiers (<40%, 40-43.9%, 44-45.9%, 46-47.9%, 48%+).</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart30"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 31: Annualized NPA Rate by Interest Rate Tier</div>
+              <div class="chart-subtitle">Default vulnerability across interest rate tiers.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart31"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 32: Platform Fee Burden as % of Gross Interest</div>
+              <div class="chart-subtitle">Platform fee drag eating 15% to 25% of gross interest earnings.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart32"></canvas></div>
+        </div>
+        <div class="chart-card" style="grid-column: span 2;">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 33: Scatter Matrix - Interest Rate vs LenDenClub Score with Default Identifiers</div>
+              <div class="chart-subtitle">Mapping individual loans: Green = Repaid in Full, Red = Defaulted (NPA).</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart33"></canvas></div>
+        </div>
+      </div>
+      <div class="insights-section">
+        <div class="insights-header"><h2 class="insights-title">Pricing & APR Insights (29 - 33)</h2></div>
+        <div class="insights-grid">
+          <div class="insight-card verdict-yellow" id="insight-29"></div>
+          <div class="insight-card verdict-red" id="insight-30"></div>
+          <div class="insight-card verdict-green" id="insight-31"></div>
+          <div class="insight-card verdict-info" id="insight-32"></div>
+          <div class="insight-card verdict-green" id="insight-33"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 7: 2D HEATMAPS & CROSS-COHORTS -->
+    <section id="tab-heatmaps" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">2D Heatmaps & Cross-Cohort Risk Matrices</h2>
+          <p class="section-subtitle">Multi-dimensional cross-tabulations revealing exact sweet spots and danger zones across score, tenure, and ticket size.</p>
+        </div>
+      </div>
+
+      <!-- Matrix 1: Score x Tenure Net Return -->
+      <div class="chart-card" style="margin-bottom: 2rem;">
+        <div class="chart-header">
+          <div class="chart-title-group">
+            <div class="chart-title">Chart 34: 2D Heatmap - Score Band (20-pt) &times; Tenure &rarr; Annualized Net Return %</div>
+            <div class="chart-subtitle">Green cells represent high-profit alpha zones; red cells represent negative net return loss zones.</div>
+          </div>
+        </div>
+        <div class="heatmap-wrapper" id="heatmap-score-tenure-net-container"></div>
+      </div>
+
+      <!-- Matrix 2: Score x Tenure NPA Rate -->
+      <div class="chart-card" style="margin-bottom: 2rem;">
+        <div class="chart-header">
+          <div class="chart-title-group">
+            <div class="chart-title">Chart 35: 2D Heatmap - Score Band (20-pt) &times; Tenure &rarr; Annualized NPA Rate %</div>
+            <div class="chart-subtitle">Default intensity mapping: Dark red indicates extreme default concentration.</div>
+          </div>
+        </div>
+        <div class="heatmap-wrapper" id="heatmap-score-tenure-npa-container"></div>
+      </div>
+
+      <!-- Matrix 3: Ticket Size x Tenure Net Return -->
+      <div class="chart-card" style="margin-bottom: 2rem;">
+        <div class="chart-header">
+          <div class="chart-title-group">
+            <div class="chart-title">Chart 36: 2D Heatmap - Ticket Size &times; Tenure &rarr; Annualized Net Return %</div>
+            <div class="chart-subtitle">Cross-tabulation showing how ticket sizing interacts with loan tenure duration.</div>
+          </div>
+        </div>
+        <div class="heatmap-wrapper" id="heatmap-amt-tenure-net-container"></div>
+      </div>
+
+      <!-- Matrix 4: Ticket Size x Score NPA Rate -->
+      <div class="chart-card" style="margin-bottom: 2rem;">
+        <div class="chart-header">
+          <div class="chart-title-group">
+            <div class="chart-title">Chart 37: 2D Heatmap - Ticket Size &times; Score Band &rarr; Annualized NPA Rate %</div>
+            <div class="chart-subtitle">Demonstrating that large ticket sizes fail even with high credit scores.</div>
+          </div>
+        </div>
+        <div class="heatmap-wrapper" id="heatmap-amt-score-npa-container"></div>
+      </div>
+
+      <!-- Matrix 5: Rate Tier x Tenure Net Return -->
+      <div class="chart-card" style="margin-bottom: 2rem;">
+        <div class="chart-header">
+          <div class="chart-title-group">
+            <div class="chart-title">Chart 38: 2D Heatmap - Interest Rate Tier &times; Tenure &rarr; Annualized Net Return %</div>
+            <div class="chart-subtitle">Pricing efficiency across tenures: High APR + short tenure = maximum compounding alpha.</div>
+          </div>
+        </div>
+        <div class="heatmap-wrapper" id="heatmap-rate-tenure-net-container"></div>
+      </div>
+
+      <div class="insights-section">
+        <div class="insights-header"><h2 class="insights-title">Cross-Cohort Matrix Insights (34 - 38)</h2></div>
+        <div class="insights-grid">
+          <div class="insight-card verdict-green" id="insight-34"></div>
+          <div class="insight-card verdict-red" id="insight-35"></div>
+          <div class="insight-card verdict-yellow" id="insight-36"></div>
+          <div class="insight-card verdict-red" id="insight-37"></div>
+          <div class="insight-card verdict-green" id="insight-38"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 8: VINTAGES & CASHFLOW LIFECYCLE -->
+    <section id="tab-vintages" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Vintage, Lifecycle & Cashflow Analytics</h2>
+          <p class="section-subtitle">Tracking disbursement vintages from Sep 2025 to Sep 2026, default maturation curves, and net cashflow generation.</p>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 39: Monthly Disbursement Volume & Capital Deployment</div>
+              <div class="chart-subtitle">Rupees disbursed and number of loans funded per calendar month.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart39"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 40: Monthly Vintage NPA Maturation Curve (%)</div>
+              <div class="chart-subtitle">Default realization by vintage: Older vintages are fully matured; recent vintages are seasoning.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart40"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 41: Cumulative Cash Lent vs Cash Recovered</div>
+              <div class="chart-subtitle">Growth curve of cumulative capital disbursed vs cumulative capital returned.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart41"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 42: Monthly Net Cashflow Generation (₹)</div>
+              <div class="chart-subtitle">Net monthly liquidity (repayments received minus fresh disbursements).</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart42"></canvas></div>
+        </div>
+        <div class="chart-card" style="grid-column: span 2;">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 43: Cumulative Platform Fees Paid vs Cumulative Net Profit Generated</div>
+              <div class="chart-subtitle">Visualizing net investor wealth creation vs total platform charges paid over time.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart43"></canvas></div>
+        </div>
+      </div>
+      <div class="insights-section">
+        <div class="insights-header"><h2 class="insights-title">Vintage & Lifecycle Insights (39 - 43)</h2></div>
+        <div class="insights-grid">
+          <div class="insight-card verdict-info" id="insight-39"></div>
+          <div class="insight-card verdict-yellow" id="insight-40"></div>
+          <div class="insight-card verdict-green" id="insight-41"></div>
+          <div class="insight-card verdict-green" id="insight-42"></div>
+          <div class="insight-card verdict-info" id="insight-43"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 9: DELINQUENCY, DPD & ACTIVE RISK -->
+    <section id="tab-delinquency" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Delinquency, DPD & Active Book Risk Management</h2>
+          <p class="section-subtitle">Days Past Due (DPD) transition modeling, roll-rate to default, active book stress-testing, and repayment mode analysis.</p>
+        </div>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 44: DPD Distribution Histogram across Portfolio</div>
+              <div class="chart-subtitle">Frequency distribution of days past due (0, 7, 27, 38, 69, 94, 130, 160, 191, 219, 250).</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart44"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 45: Active Loans Health Breakdown (1,385 Loans)</div>
+              <div class="chart-subtitle">Current (0 DPD) vs Stage 1 (1-30 DPD), Stage 2 (31-60 DPD), and Stage 3 (61-90 DPD).</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart45"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 46: Principal at Risk by DPD Stage in Active Book</div>
+              <div class="chart-subtitle">Rupees of outstanding principal exposed across delinquency buckets (₹738.9k total POS).</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart46"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 47: Historical Roll Rate - Probability of Default by DPD Milestone</div>
+              <div class="chart-subtitle">Historical likelihood that a loan reaching 7 DPD, 38 DPD, or 69 DPD rolls into 90+ DPD NPA.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart47"></canvas></div>
+        </div>
+        <div class="chart-card" style="grid-column: span 2;">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 48: Repayment Type Comparison - Monthly EMI vs Daily EDI Catastrophe</div>
+              <div class="chart-subtitle">Monthly EMI (+14.71% net return, 4.4% NPA) vs Daily EDI (-73.19% net return, 74.2% NPA).</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart48"></canvas></div>
+        </div>
+      </div>
+      <div class="insights-section">
+        <div class="insights-header"><h2 class="insights-title">Delinquency & Active Book Insights (44 - 48)</h2></div>
+        <div class="insights-grid">
+          <div class="insight-card verdict-red" id="insight-44"></div>
+          <div class="insight-card verdict-red" id="insight-45"></div>
+          <div class="insight-card verdict-green" id="insight-46"></div>
+          <div class="insight-card verdict-yellow" id="insight-47"></div>
+          <div class="insight-card verdict-red" id="insight-48"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 10: DECISION ENGINE, SIMULATOR & FILTER BLUEPRINT -->
+    <section id="tab-decision" class="tab-pane">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">LenDenClub Website Filter Blueprint & Algorithmic Underwriter</h2>
+          <p class="section-subtitle">Actionable website filter blueprint, real-time prospective loan underwriter, backtested portfolio strategy, and searchable loan database.</p>
+        </div>
+      </div>
+
+      <!-- Real-Time Loan Underwriting Simulator -->
+      <div class="simulator-card">
+        <div class="section-title" style="font-size: 1.15rem; margin-bottom: 1rem;">Interactive Loan Underwriting Simulator</div>
+        <div class="sim-grid">
+          <div class="sim-form">
+            <div class="form-group">
+              <label class="form-label"><span>Borrower LenDenClub Score</span> <strong id="sim-score-val">750</strong></label>
+              <input type="range" id="sim-score" class="form-input" min="700" max="850" value="750" step="5">
+            </div>
+            <div class="form-group">
+              <label class="form-label"><span>Loan Tenure</span></label>
+              <select id="sim-tenure" class="form-select">
+                <option value="2" selected>2 Months (Multiplier: 6.0x)</option>
+                <option value="3">3 Months (Multiplier: 4.0x)</option>
+                <option value="4">4 Months (Multiplier: 3.0x)</option>
+                <option value="5">5 Months (Multiplier: 2.4x)</option>
+                <option value="6">6 Months (Multiplier: 2.0x)</option>
+                <option value="12">12 Months (Multiplier: 1.0x - NOT RECOMMENDED)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label"><span>Lending Ticket Amount (₹)</span></label>
+              <select id="sim-amount" class="form-select">
+                <option value="250" selected>₹ 250 (Optimal Diversification)</option>
+                <option value="500">₹ 500 (Balanced Allocation)</option>
+                <option value="1000">₹ 1,000 (Maximum Safe Ceiling)</option>
+                <option value="2000">₹ 2,000 (Concentration Risk)</option>
+                <option value="4000">₹ 4,000 (Severe Downside Trap)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label"><span>Contractual APR (%)</span> <strong id="sim-apr-val">46.0%</strong></label>
+              <input type="range" id="sim-apr" class="form-input" min="20.0" max="52.0" value="46.0" step="0.5">
+            </div>
+            <div class="form-group">
+              <label class="form-label"><span>Repayment Frequency</span></label>
+              <select id="sim-repay" class="form-select">
+                <option value="Monthly" selected>Equated Monthly Installment (EMI)</option>
+                <option value="Daily">Equated Daily Installment (EDI - TOXIC)</option>
+              </select>
+            </div>
+          </div>
+          <div class="sim-result-box">
+            <div class="verdict-header">
+              <span style="font-size: 0.85rem; color: var(--text-secondary); text-transform: uppercase;">Underwriting Verdict</span>
+              <div id="sim-verdict-badge" class="verdict-badge approve">APPROVE</div>
+            </div>
+            <div class="sim-metrics-grid">
+              <div class="sim-metric-cell">
+                <div class="sim-metric-title">Expected Net Ann. Return</div>
+                <div class="sim-metric-number" id="sim-net-return" style="color: var(--color-emerald-light);">+24.8%</div>
+              </div>
+              <div class="sim-metric-cell">
+                <div class="sim-metric-title">Historical Default Probability</div>
+                <div class="sim-metric-number" id="sim-npa-prob" style="color: var(--color-cyan);">1.8%</div>
+              </div>
+              <div class="sim-metric-cell">
+                <div class="sim-metric-title">Annualized Multiplier</div>
+                <div class="sim-metric-number" id="sim-mult">6.0x</div>
+              </div>
+              <div class="sim-metric-cell">
+                <div class="sim-metric-title">Risk-Reward Rating</div>
+                <div class="sim-metric-number" id="sim-rating" style="color: var(--color-emerald-light);">A+ Prime</div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.35rem;">Algorithmic Rule Checks:</div>
+              <ul class="rule-alert-list" id="sim-alerts"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Website Filter Blueprint -->
+      <div class="insights-header" style="margin: 2rem 0 1rem;">
+        <h3 class="insights-title">LenDenClub Website Filter Blueprint &bull; Exact Settings to Configure</h3>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
+        Configure these exact checkboxes in your LenDenClub portal (<a href="https://app.lendenclub.com/" target="_blank" style="color: var(--color-cyan);">app.lendenclub.com</a>) under "Manual Lending &rarr; Available Loans &rarr; Filters" to systematically lock in high alpha and block toxic loans.
+      </p>
+      <div class="filter-blueprint-grid" id="filter-blueprint-container"></div>
+
+      <!-- Backtest & Strategy Charts -->
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 49: Backtest - Historical Portfolio vs Golden Rules Strategy</div>
+              <div class="chart-subtitle">Annualized Net Return: Historical (14.7%) vs Algorithmic Strategy (+23.5%).</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart49"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 50: Backtest - Default Rate Elimination (NPA % Comparison)</div>
+              <div class="chart-subtitle">Historical NPA (14.0% annualized) plunged to 3.8% under the Golden Rules.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart50"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 51: Cohort Filter Radar - Approved vs Rejected Cohorts</div>
+              <div class="chart-subtitle">Radar profile across APR, Score, Multiplier, Safety Index, and Net Yield.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart51"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <div class="chart-title-group">
+              <div class="chart-title">Chart 52: Active Book Scenario Projections (Bull vs Base vs Stress)</div>
+              <div class="chart-subtitle">Projected net return on ₹738.9k outstanding principal under 3 default scenarios.</div>
+            </div>
+          </div>
+          <div class="chart-canvas-container"><canvas id="chart52"></canvas></div>
+        </div>
+      </div>
+
+      <!-- Live Available Loans Evaluator (from HAR) -->
+      <div class="chart-card" style="margin-bottom: 2rem;">
+        <div class="chart-header">
+          <div class="chart-title-group">
+            <div class="chart-title">Live Marketplace Loan Evaluator (Scraped from HAR)</div>
+            <div class="chart-subtitle">Real-time evaluation of currently listed borrower loans on LenDenClub against our algorithmic policy.</div>
+          </div>
+        </div>
+        <div class="table-scroll" style="max-height: 300px;">
+          <table class="lending-table" id="available-loans-table">
+            <thead>
+              <tr>
+                <th>Loan ID</th>
+                <th>Borrower</th>
+                <th>Tenure</th>
+                <th>ROI (%)</th>
+                <th>Score</th>
+                <th>Frequency</th>
+                <th>Algorithmic Recommendation</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Complete Loan Database Table -->
+      <div class="data-table-container">
+        <div class="table-toolbar">
+          <div>
+            <div style="font-weight: 700; font-size: 1rem; color: #fff;">Complete Portfolio Loan Database (3,967 Loans)</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Search, filter, and inspect every individual loan record.</div>
+          </div>
+          <div class="table-filter-group">
+            <input type="text" id="table-search" class="search-input" placeholder="Search Loan ID, Borrower, Score...">
+            <select id="table-status-filter" class="form-select" style="padding: 0.45rem 0.75rem; font-size: 0.8rem;">
+              <option value="ALL">All Statuses</option>
+              <option value="CLOSED">Closed Only</option>
+              <option value="ACTIVE">Active Only</option>
+              <option value="NPA">NPA Only</option>
+            </select>
+            <select id="table-tenure-filter" class="form-select" style="padding: 0.45rem 0.75rem; font-size: 0.8rem;">
+              <option value="ALL">All Tenures</option>
+              <option value="2">2 Months</option>
+              <option value="3">3 Months</option>
+              <option value="4">4 Months</option>
+              <option value="5">5 Months</option>
+              <option value="6">6 Months</option>
+              <option value="12">12 Months</option>
+            </select>
+            <button id="btn-export-csv" class="btn-sm" style="background: var(--color-emerald); color: #000; font-weight: 700;">Export CSV</button>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table class="lending-table" id="main-loans-table">
+            <thead>
+              <tr>
+                <th>Loan ID</th>
+                <th>Disbursement</th>
+                <th>Amount (₹)</th>
+                <th>Status</th>
+                <th>Tenure</th>
+                <th>Score</th>
+                <th>APR (%)</th>
+                <th>Repay Type</th>
+                <th>DPD</th>
+                <th>Received (₹)</th>
+                <th>Platform Fee (₹)</th>
+                <th>NPA (₹)</th>
+                <th>Net Profit (₹)</th>
+                <th>Ann. Net Return</th>
+              </tr>
+            </thead>
+            <tbody id="loans-table-body"></tbody>
+          </table>
+        </div>
+        <div class="table-pagination">
+          <span id="page-info">Showing 1 to 25 of 3,967 loans</span>
+          <div class="page-btn-group">
+            <button id="btn-prev-page" class="btn-sm" disabled>&larr; Previous</button>
+            <button id="btn-next-page" class="btn-sm">Next &rarr;</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Insight Cards 49-53 -->
+      <div class="insights-section">
+        <div class="insights-header"><h2 class="insights-title">Algorithmic Decision & Strategy Insights (49 - 53)</h2></div>
+        <div class="insights-grid">
+          <div class="insight-card verdict-green" id="insight-49"></div>
+          <div class="insight-card verdict-green" id="insight-50"></div>
+          <div class="insight-card verdict-info" id="insight-51"></div>
+          <div class="insight-card verdict-yellow" id="insight-52"></div>
+          <div class="insight-card verdict-green" id="insight-53"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer-bar">
+    LenDenClub Portfolio Analysis & Algorithmic Underwriting Engine &bull; Automated Deployment to GitHub Pages via GitHub Actions &bull; Strictly Confidential Investor Analytics
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

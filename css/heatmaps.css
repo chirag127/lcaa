@@ -1,0 +1,39 @@
+/* ==========================================================================
+   Heatmaps & 2D Cross-Cohort Matrix Tables
+   ========================================================================== */
+
+.heatmap-wrapper {
+  overflow-x: auto;
+  margin-top: 0.5rem;
+}
+
+.heatmap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.heatmap-table th,
+.heatmap-table td {
+  padding: 0.65rem 0.5rem;
+  border: 1px solid var(--border-subtle);
+}
+
+.heatmap-table th {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.heatmap-cell {
+  font-weight: 700;
+  border-radius: 4px;
+  transition: transform 0.15s;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.08);
+  z-index: 2;
+  box-shadow: 0 0 12px rgba(0,0,0,0.5);
+}
