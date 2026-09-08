@@ -652,80 +652,80 @@ export default function TabAdvancedCharts({ data, isDark = false }) {
       {/* Strategic Insight Directives for Advanced Visualizations */}
       <div style={{ marginTop: '2.5rem' }}>
         <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem' }}>
-          Quantitative Visual Taxonomy Insights (1 – 6)
+          Quantitative Visual Taxonomy Insights (101 – 106)
         </h3>
         <div className="insights-grid">
           <InsightCard
-            number="V01"
-            tag="SANKEY ALPHA"
+            id="101"
+            badge="SANKEY ALPHA"
             title="Capital Conversion: ₹28.7L → ₹1.22L Net Realized Profit"
-            description="The Sankey flow proves that out of ₹2.57L gross interest collected, platform fees claimed only ₹45.9k, leaving ₹1.22L clean alpha even after absorbing ₹88.8k of NPA write-offs."
-            kpis={[
+            body="The Sankey flow proves that out of ₹2.57L gross interest collected, platform fees claimed only ₹45.9k, leaving ₹1.22L clean alpha even after absorbing ₹88.8k of NPA write-offs."
+            metrics={[
               { label: 'Total Inflow', value: '₹22.99L' },
               { label: 'Gross Interest', value: '₹2.57L' },
               { label: 'Realized Alpha', value: '+₹1.22L' }
             ]}
-            recommendation="MANDATE: Protect gross interest cushion (>44% APR) to out-earn write-offs and platform charges."
+            directive="MANDATE: Protect gross interest cushion (>44% APR) to out-earn write-offs and platform charges."
           />
           <InsightCard
-            number="V02"
-            tag="BOXPLOT DISPERSION"
+            id="102"
+            badge="BOXPLOT DISPERSION"
             title="Tenure Variance: 3M Tight Band vs 12M Negative Drag"
-            description="The Boxplot reveals that 3-Month loans have a tight, high interquartile range (Q1: 29.4%, Median: 35.5%, Q3: 39.2%), while 12-Month loans have a negative lower whisker (-25.8%) and a dismal 9.7% median."
-            kpis={[
+            body="The Boxplot reveals that 3-Month loans have a tight, high interquartile range (Q1: 29.4%, Median: 35.5%, Q3: 39.2%), while 12-Month loans have a negative lower whisker (-25.8%) and a dismal 9.7% median."
+            metrics={[
               { label: '3M Median', value: '+35.5%' },
               { label: '12M Median', value: '+9.7%' },
               { label: '3M IQR', value: '9.8%' }
             ]}
-            recommendation="MANDATE: Restrict loans to low-dispersion 2M–4M tenures."
+            directive="MANDATE: Restrict loans to low-dispersion 2M–4M tenures."
           />
           <InsightCard
-            number="V03"
-            tag="TORNADO BALANCE"
+            id="103"
+            badge="TORNADO BALANCE"
             title="Diverging Risk: 2M Carries 211 Repaid to 3 Defaults (70:1)"
-            description="The Butterfly (Tornado) chart highlights the extreme contrast in loan safety: 2-Month loans exhibit a staggering 70:1 performing-to-default ratio, while 6-Month loans drop to 8.6:1."
-            kpis={[
+            body="The Butterfly (Tornado) chart highlights the extreme contrast in loan safety: 2-Month loans exhibit a staggering 70:1 performing-to-default ratio, while 6-Month loans drop to 8.6:1."
+            metrics={[
               { label: '2M Ratio', value: '70 : 1' },
               { label: '6M Ratio', value: '8.6 : 1' },
               { label: 'Safety Advantage', value: '+714%' }
             ]}
-            recommendation="MANDATE: Maximize capital allocation to 2M and 3M tenures."
+            directive="MANDATE: Maximize capital allocation to 2M and 3M tenures."
           />
           <InsightCard
-            number="V04"
-            tag="SUNBURST ALLOCATION"
+            id="104"
+            badge="SUNBURST ALLOCATION"
             title="Hierarchical Ring Concentration: AA Salaried Core"
-            description="The Sunburst breakdown demonstrates that 78.4% of total capital is concentrated in Salaried AA & A borrowers on NACH auto-debit, producing an overall 96.9% repayment recovery."
-            kpis={[
+            body="The Sunburst breakdown demonstrates that 78.4% of total capital is concentrated in Salaried AA & A borrowers on NACH auto-debit, producing an overall 96.9% repayment recovery."
+            metrics={[
               { label: 'Salaried Share', value: '78.4%' },
               { label: 'Recovery Rate', value: '96.9%' },
               { label: 'Active Book', value: '₹7.39L' }
             ]}
-            recommendation="MANDATE: Continue filtering for salaried borrowers with stable monthly employer NACH mandates."
+            directive="MANDATE: Continue filtering for salaried borrowers with stable monthly employer NACH mandates."
           />
           <InsightCard
-            number="V05"
-            tag="CANDLESTICK SPREAD"
+            id="105"
+            badge="CANDLESTICK SPREAD"
             title="Vintage Stability: 2025–2026 Narrowing Spreads"
-            description="The Candlestick OHLC model illustrates that as ticket sizes were tightened from ₹2,000 down to ₹250–₹500, the downside tail (minimum whisker) contracted from -161% to -5%."
-            kpis={[
+            body="The Candlestick OHLC model illustrates that as ticket sizes were tightened from ₹2,000 down to ₹250–₹500, the downside tail (minimum whisker) contracted from -161% to -5%."
+            metrics={[
               { label: 'Historical Min', value: '-161.0%' },
               { label: 'Current Min', value: '-5.0%' },
               { label: 'Tail Reduction', value: '96.9%' }
             ]}
-            recommendation="MANDATE: Never breach the ₹1,000 ticket ceiling."
+            directive="MANDATE: Never breach the ₹1,000 ticket ceiling."
           />
           <InsightCard
-            number="V06"
-            tag="RADAR PROFILE"
+            id="106"
+            badge="RADAR PROFILE"
             title="Multivariate Superiority: Golden Rules vs Unconstrained"
-            description="On the 6-axis Radar chart, Golden Rules portfolios dominate across Velocity (+600%), Net Yield (+60%), and Safety (+80%), maintaining superior fee cushion and recovery."
-            kpis={[
+            body="On the 6-axis Radar chart, Golden Rules portfolios dominate across Velocity (+600%), Net Yield (+60%), and Safety (+80%), maintaining superior fee cushion and recovery."
+            metrics={[
               { label: 'Velocity Score', value: '96 / 100' },
               { label: 'Safety Score', value: '94 / 100' },
               { label: 'Yield Score', value: '92 / 100' }
             ]}
-            recommendation="MANDATE: Deploy 100% of capital strictly adhering to the Golden Rules criteria."
+            directive="MANDATE: Deploy 100% of capital strictly adhering to the Golden Rules criteria."
           />
         </div>
       </div>
