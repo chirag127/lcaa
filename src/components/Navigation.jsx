@@ -10,7 +10,8 @@ export const TABS = [
   { id: 'tab-heatmaps', label: '7. 2D Heatmaps (10x)', count: '10 Matrices' },
   { id: 'tab-vintages', label: '8. Vintages & Cashflow', count: '10 Charts' },
   { id: 'tab-delinquency', label: '9. Delinquency & DPD', count: '10 Charts' },
-  { id: 'tab-strategy', label: '10. Blueprint & Database', count: '8 Charts + DB' }
+  { id: 'tab-strategy', label: '10. Blueprint & Database', count: '8 Charts + DB' },
+  { id: 'tab-advanced', label: '11. Visual Taxonomy Matrix', count: '18 Chart Types' }
 ];
 
 export default function Navigation({ activeTab, onSelectTab }) {

@@ -14,6 +14,7 @@ import TabHeatmaps from './views/TabHeatmaps';
 import TabVintages from './views/TabVintages';
 import TabDelinquency from './views/TabDelinquency';
 import TabStrategy from './views/TabStrategy';
+import TabAdvancedCharts from './views/TabAdvancedCharts';
 
 export default function App() {
   const [data, setData] = useState(null);
@@ -106,6 +107,7 @@ export default function App() {
           {activeTab === 'tab-vintages' && <TabVintages data={data} isDark={isDark} />}
           {activeTab === 'tab-delinquency' && <TabDelinquency data={data} isDark={isDark} />}
           {activeTab === 'tab-strategy' && <TabStrategy data={data} isDark={isDark} />}
+          {activeTab === 'tab-advanced' && <TabAdvancedCharts data={data} isDark={isDark} />}
         </main>
       </div>
 
