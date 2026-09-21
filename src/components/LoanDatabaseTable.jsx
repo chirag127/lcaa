@@ -44,9 +44,36 @@ export default function LoanDatabaseTable({ loans = [] }) {
     window.location.href = './clean_lending_report.csv';
   }
 
-  const toggleExpand = (id) => {
-    setExpandedId(prev => prev === id ? null : id);
-  };
+  const demoStats = useMemo(() => {
+    const total = loans.length || 1;
+    const verified = loans.filter(l => l.borrower_employment_status === 'Verified' || l.agreement_url).length;
+    const incomes = loans.map(l => Number(l.borrower_income)).filter(n => !isNaN(n) && n > 0);
+    const avgInc = incomes.length ? Math.round(incomes.reduce((a, b) => a + b, 0) / incomes.length) : 0;
+    const sortedInc = [...incomes].sort((a, b) => a - b);
+    const medianInc = sortedInc.length ? sortedInc[Math.floor(sortedInc.length / 2)] : 0;
+    const ages = loans.map(l => Number(l.borrower_age)).filter(n => !isNaN(n) && n > 0);
+    const avgAge = ages.length ? (ages.reduce((a, b) => a + b, 0) / ages.length).toFixed(1) : 0;
+    const minAge = ages.length ? Math.min(...ages) : 0;
+    const maxAge = ages.length ? Math.max(...ages) : 0;
+    const males = loans.filter(l => String(l.borrower_gender).toUpperCase() === 'MALE').length;
+    const malePct = loans.length ? Math.round((males / loans.length) * 100) : 0;
+    const pdfs = loans.filter(l => l.agreement_url).length;
+
+    return {
+      verified,
+      verifiedPct: ((verified / total) * 100).toFixed(1),
+      avgInc,
+      medianInc,
+      avgAge,
+      ageRange: minAge > 0 ? `${minAge} to ${maxAge} yrs (${malePct}% Male)` : 'N/A',
+      pdfs
+    };
+  }, [loans]);
+
+  const closedCount = useMemo(() => loans.filter(l => l.status === 'CLOSED').length, [loans]);
+  const activeCount = useMemo(() => loans.filter(l => l.status === 'ACTIVE').length, [loans]);
+  const npaCount = useMemo(() => loans.filter(l => l.status === 'NPA' || Number(l.npa) > 0).length, [loans]);
+  const cancelledCount = useMemo(() => loans.filter(l => l.status === 'CANCELLED' || l.status === 'REJECTED').length, [loans]);
 
   return (
     <div className="glass-panel" style={{ padding: '1.75rem', marginBottom: '2rem' }}>
@@ -54,32 +81,36 @@ export default function LoanDatabaseTable({ loans = [] }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
         <div style={{ background: 'var(--emerald-bg)', border: '1px solid var(--emerald-border)', borderRadius: '8px', padding: '1rem' }}>
           <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 700 }}>VERIFIED PROFILES</div>
-          <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--emerald)', marginTop: '0.25rem' }}>3,958 <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>(99.8%)</span></div>
+          <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--emerald)', marginTop: '0.25rem' }}>
+            {demoStats.verified.toLocaleString()} <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>({demoStats.verifiedPct}%)</span>
+          </div>
           <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>Full bureau + income verified</div>
         </div>
 
         <div style={{ background: 'var(--cyan-bg)', border: '1px solid var(--cyan-border)', borderRadius: '8px', padding: '1rem' }}>
           <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 700 }}>AVG. VERIFIED INCOME</div>
-          <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--cyan)', marginTop: '0.25rem' }}>₹92,704 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>/ mo</span></div>
-          <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>Median: ₹63,076 / mo</div>
+          <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--cyan)', marginTop: '0.25rem' }}>
+            {formatINR(demoStats.avgInc)} <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>/ mo</span>
+          </div>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>Median: {formatINR(demoStats.medianInc)} / mo</div>
         </div>
 
         <div style={{ background: 'var(--amber-bg)', border: '1px solid var(--amber-border)', borderRadius: '8px', padding: '1rem' }}>
           <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 700 }}>AVG. BORROWER AGE</div>
-          <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--amber)', marginTop: '0.25rem' }}>34.6 yrs</div>
-          <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>Range: 21 to 57 yrs (86% Male)</div>
+          <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--amber)', marginTop: '0.25rem' }}>{demoStats.avgAge} yrs</div>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>Range: {demoStats.ageRange}</div>
         </div>
 
         <div style={{ background: 'var(--purple-bg)', border: '1px solid var(--purple-border)', borderRadius: '8px', padding: '1rem' }}>
           <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', fontWeight: 700 }}>LEGAL AGREEMENTS</div>
-          <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--purple)', marginTop: '0.25rem' }}>3,958 PDFs</div>
+          <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--purple)', marginTop: '0.25rem' }}>{demoStats.pdfs.toLocaleString()} PDFs</div>
           <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', marginTop: '0.2rem' }}>Direct AWS S3 signed documents</div>
         </div>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>Complete Portfolio Loan Database (3,967 Loans)</h3>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>Filtered Portfolio Loan Database ({loans.length.toLocaleString()} Loans)</h3>
           <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Click any loan row to reveal complete borrower profile, salary/income, bureau score, and signed agreement PDF.</p>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -96,11 +127,11 @@ export default function LoanDatabaseTable({ loans = [] }) {
             onChange={e => { setStatusFilter(e.target.value); setPage(1); }}
             style={{ padding: '0.45rem 0.75rem', background: 'var(--bg-elevated)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '0.8rem' }}
           >
-            <option value="ALL">All Statuses ({loans.length})</option>
-            <option value="CLOSED">Closed Only (2,396)</option>
-            <option value="ACTIVE">Active Only (1,385)</option>
-            <option value="NPA">NPA Defaults Only (149)</option>
-            <option value="CANCELLED">Rejected/Cancelled (37)</option>
+            <option value="ALL">All Statuses ({loans.length.toLocaleString()})</option>
+            <option value="CLOSED">Closed Only ({closedCount.toLocaleString()})</option>
+            <option value="ACTIVE">Active Only ({activeCount.toLocaleString()})</option>
+            <option value="NPA">NPA Defaults Only ({npaCount.toLocaleString()})</option>
+            <option value="CANCELLED">Rejected/Cancelled ({cancelledCount.toLocaleString()})</option>
           </select>
 
           <select

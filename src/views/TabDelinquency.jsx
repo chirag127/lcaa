@@ -77,13 +77,16 @@ export default function TabDelinquency({ data, isDark = false }) {
     },
     series: [{
       type: 'bar',
-      data: scenarios.map(s => ({
-        value: s.projected_net_ann_return_pct,
-        itemStyle: {
-          color: s.projected_net_ann_return_pct >= 20 ? colors.emerald : s.projected_net_ann_return_pct >= 10 ? colors.amber : colors.crimson,
-          borderRadius: [4, 4, 0, 0]
-        }
-      })),
+      data: scenarios.map(s => {
+        const val = s.projected_ann_net ?? s.projected_net_ann_return_pct ?? 0;
+        return {
+          value: val,
+          itemStyle: {
+            color: val >= 20 ? colors.emerald : val >= 10 ? colors.amber : colors.crimson,
+            borderRadius: [4, 4, 0, 0]
+          }
+        };
+      }),
       barMaxWidth: 38
     }]
   };
@@ -147,13 +150,18 @@ export default function TabDelinquency({ data, isDark = false }) {
     }]
   };
 
-  // Chart 90: Active Book Health Doughnut
+  // Chart 90: Active Book Health Doughnut (Dynamic count matching)
+  const currentCount = dpdActive.find(d => d.cohort?.includes('Current'))?.loans ?? 0;
+  const stage1Count = dpdActive.find(d => d.cohort?.includes('Stage 1'))?.loans ?? 0;
+  const stage2Count = dpdActive.find(d => d.cohort?.includes('Stage 2'))?.loans ?? 0;
+  const stage3Count = dpdActive.find(d => d.cohort?.includes('Stage 3'))?.loans ?? 0;
+
   const chart90Option = buildDonutOption({
     data: [
-      { name: 'Current (0 DPD)', value: dpdActive[0]?.loans ?? 1321, itemStyle: { color: colors.emerald } },
-      { name: 'Early Delinquent (1-30 DPD)', value: dpdActive[1]?.loans ?? 34, itemStyle: { color: colors.cyan } },
-      { name: 'Mid Delinquent (31-60 DPD)', value: dpdActive[2]?.loans ?? 18, itemStyle: { color: colors.amber } },
-      { name: 'Critical (61-90 DPD)', value: dpdActive[3]?.loans ?? 12, itemStyle: { color: colors.crimson } }
+      { name: 'Current (0 DPD)', value: currentCount, itemStyle: { color: colors.emerald } },
+      { name: 'Early Delinquent (1-30 DPD)', value: stage1Count, itemStyle: { color: colors.cyan } },
+      { name: 'Mid Delinquent (31-60 DPD)', value: stage2Count, itemStyle: { color: colors.amber } },
+      { name: 'Critical (61-90 DPD)', value: stage3Count, itemStyle: { color: colors.crimson } }
     ],
     isDark,
     centerTitle: 'Book Health'
@@ -199,34 +207,28 @@ export default function TabDelinquency({ data, isDark = false }) {
       </div>
 
       <div className="charts-grid-2">
-        <ChartCard title="Chart 83: Active Book Staging Distribution" subtitle="Active loan distribution across standard IFRS-9 delinquency stages." option={chart83Option} />
-        <ChartCard title="Chart 84: Active Disbursed Capital by Delinquency Stage" subtitle="Outstanding principal risk across current and delinquent loans." option={chart84Option} />
-        <ChartCard title="Chart 85: Stress-Test Projected NPA Losses by Scenario" subtitle="Simulated write-off losses under Baseline, Mild, Severe, and Extreme macro stress." option={chart85Option} />
-        <ChartCard title="Chart 86: Projected Annualized Net Return Under Macro Stress" subtitle="Net annualized return remains positive (+11.8% to +21.4%) across scenarios." option={chart86Option} />
-        <ChartCard title="Chart 87: EDI (Daily) vs EMI (Monthly) Funded Loan Volume" subtitle="Portfolio exposure split between Daily business installment and Monthly payroll." option={chart87Option} />
-        <ChartCard title="Chart 88: EDI vs EMI Historical Default Rate Comparison" subtitle="Daily EDI loans defaulted at a catastrophic 74.22% rate vs 5.37% for Monthly." option={chart88Option} />
-        <ChartCard title="Chart 89: EDI vs EMI Annualized Net Return Comparison" subtitle="Monthly EMI generated +14.71% net return; Daily EDI produced a devastating -73.19% loss." option={chart89Option} />
-        <ChartCard title="Chart 90: Active Portfolio Staging Composition (IFRS-9)" subtitle="95.4% of active loans are fully performing at Stage 1 (0 DPD)." option={chart90Option} />
-        <ChartCard title="Chart 91: Historical DPD Roll-Rate Transition Probabilities" subtitle="Once a loan reaches 30+ DPD, probability of full default surges to 94.2%." option={chart91Option} />
-        <ChartCard title="Chart 92: Platform Fee Collection Across Active Stages" subtitle="Fees collected on active loans across performing and delinquent stages." option={chart92Option} />
+        <ChartCard title="Chart 83: Active Book Staging Distribution" subtitle="Performing active loans segmented by Days Past Due (DPD) buckets." option={chart83Option} />
+        <ChartCard title="Chart 84: Active Disbursed Capital by Stage" subtitle="Capital volume exposed across current and early delinquent stages." option={chart84Option} />
+        <ChartCard title="Chart 85: Projected NPA Loss by Scenario" subtitle="Stress testing the active portfolio under Base, Mild, and Severe delinquency spillover." option={chart85Option} />
+        <ChartCard title="Chart 86: Projected Annualized Net Return Under Stress" subtitle="Estimated net return after absorbing projected ECL losses in each scenario." option={chart86Option} />
+        <ChartCard title="Chart 87: EDI vs EMI Loan Origination Volume" subtitle="Comparison of total loans originated under Daily vs Monthly schedules." option={chart87Option} />
+        <ChartCard title="Chart 88: Annualized NPA Rate: EDI vs EMI" subtitle="74.22% default rate for Daily (EDI) vs 14.04% for Monthly (EMI)." option={chart88Option} />
+        <ChartCard title="Chart 89: Realized Net Annualized Return: EDI vs EMI" subtitle="Monthly EMI generated +14.71% net; Daily EDI caused catastrophic -73.19% net loss." option={chart89Option} />
+        <ChartCard title="Chart 90: Active Book Health Doughnut" subtitle="Proportion of performing active loans vs early, mid, and late delinquencies." option={chart90Option} />
+        <ChartCard title="Chart 91: Roll Rate Transition Probability Curve" subtitle="Probability of a loan deteriorating from one DPD stage to the next." option={chart91Option} />
+        <ChartCard title="Chart 92: Active Stage Platform Fee Friction" subtitle="Cumulative platform charges collected on loans across each DPD stage." option={chart92Option} />
       </div>
 
-      {/* Insight Cards */}
+      {/* Delinquency Insight Cards */}
       <div style={{ marginTop: '2.5rem' }}>
         <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem' }}>
-          Delinquency & Stress-Testing Insights (83 – 92)
+          Delinquency Surveillance & Recovery Mandates (81 – 90)
         </h3>
         <div className="insights-grid">
-          <InsightCard id={83} type="green" badge="STAGE 1 DOMINANCE" title="95.4% of Active Book is Performing at 0 DPD" body="₹7.05 Lakh of your ₹7.39 Lakh active principal is completely current with zero missed payments, proving the underlying health of your performing portfolio." metrics={[{ label: 'Clean POS', value: '₹7.05L' }, { label: 'Clean Share', value: '95.4%' }, { label: 'Health Status', value: 'Pristine' }]} directive="MANDATE: Continue filtering for Monthly EMI to keep roll rates near zero." />
-          <InsightCard id={84} type="red" badge="DAILY EDI DISASTER" title="The Daily Repayment Catastrophe: -73.19% Loss" body="Daily auto-debit (EDI) loans suffered a 74.22% default rate and wiped out -73.19% of capital. Daily cash extraction strangles borrower working capital." metrics={[{ label: 'NPA Rate', value: '74.22%' }, { label: 'Net Return', value: '-73.19%' }, { label: 'Severity', value: 'Fatal' }]} directive="MANDATE: Blacklist Equated Daily Installments (EDI) permanently." />
-          <InsightCard id={85} type="green" badge="MONTHLY RELIABILITY" title="Monthly EMI: The Bedrock of Stable Compounding" body="Monthly EMI loans delivered a healthy +14.71% net annualized return with modest 5.37% default rates across 3,643 loans." metrics={[{ label: 'Loans', value: '3,643' }, { label: 'NPA Rate', value: '5.37%' }, { label: 'Net Return', value: '+14.71%' }]} directive="MANDATE: Mandate Monthly EMI as an absolute requirement for all loans." />
-          <InsightCard id={86} type="yellow" badge="ROLL-RATE TRAP" title="94.2% of 60+ DPD Loans Roll Directly into NPA" body="Delinquency transition data proves that borrowers reaching 60+ DPD rarely recover. 94.2% roll directly into total write-offs." metrics={[{ label: '60+ Roll Rate', value: '94.2%' }, { label: 'Cure Rate', value: '< 6%' }, { label: 'Action', value: 'Write-off' }]} directive="MANDATE: Do not count on recovery for loans past 60 DPD." />
-          <InsightCard id={87} type="green" badge="STRESS RESILIENCE" title="Stress Test Confirms: +11.8% Return in Severe Downturn" body="Even under severe macro distress where 50% of delinquent loans immediately default, your portfolio generates +11.8% net annualized returns." metrics={[{ label: 'Severe Return', value: '+11.8%' }, { label: 'Baseline', value: '+21.4%' }, { label: 'Loss Cushion', value: 'Ample' }]} directive="MANDATE: Trust the portfolio safety buffers in any economic climate." />
-          <InsightCard id={88} type="info" badge="ECL PROVISIONING" title="Stage 2 & 3 At-Risk Capital: Only ₹34.2k Total" body="Total active capital in delinquent stages (1–90 DPD) is limited to just ₹34,200 across 64 loans, leaving 95.4% of your book completely insulated." metrics={[{ label: 'At-Risk POS', value: '₹34.2k' }, { label: 'Share of Book', value: '4.6%' }, { label: 'Risk Scale', value: 'Minimal' }]} directive="MANDATE: Keep at-risk principal under 5% of active capital." />
-          <InsightCard id={89} type="green" badge="COLLECTION SPEED" title="Fast Amortization Shields Against Macro Shifts" body="Because average duration is under 4 months, 25%–50% of outstanding loan principal is repaid before any macroeconomic shock can trigger defaults." metrics={[{ label: 'Avg Duration', value: '3.4 Months' }, { label: 'Monthly Amort.', value: '29.4%' }, { label: 'Defense', value: 'Inherent' }]} directive="MANDATE: Short duration provides built-in risk mitigation." />
-          <InsightCard id={90} type="yellow" badge="LATE-STAGE DRAG" title="Stage 3 Loans Generate Zero Interest Income" body="Loans at 61–90 DPD cease paying interest while still tying up investor capital. Eliminating long tenures prevents loans from entering Stage 3." metrics={[{ label: 'Stage 3 Loans', value: '12' }, { label: 'Yield Drag', value: '-0.4%' }, { label: 'Prevention', value: 'Tenure ≤ 4M' }]} directive="MANDATE: Cut tenures to prevent borrower fatigue." />
-          <InsightCard id={91} type="green" badge="LIQUIDITY FLOW" title="Performing Cash Stream: ₹1.5L+ Monthly Inflow" body="Healthy Stage 1 loans generate over ₹1.5 Lakh in monthly principal and interest returns, providing continuous liquidity to redeploy into 2M–4M notes." metrics={[{ label: 'Monthly Cash', value: '₹1.5L+' }, { label: 'Reinvestment', value: 'Continuous' }, { label: 'Velocity', value: 'Rapid' }]} directive="MANDATE: Maintain 100% active capital reinvestment rate." />
-          <InsightCard id={92} type="green" badge="PORTFOLIO MANDATE" title="The Non-Negotiable Filter: Monthly EMI Only" body="By strictly checking 'Equated Monthly Installment (EMI)' in the filter settings, you permanently eliminate 100% of Daily EDI toxicity." metrics={[{ label: 'EDI Elimination', value: '100%' }, { label: 'Loss Avoidance', value: '₹62.5k' }, { label: 'Rule Status', value: 'Mandatory' }]} directive="MANDATE: Verify Monthly EMI checkbox on every single investment run." />
+          <InsightCard id={81} type="green" badge="BOOK QUALITY" title="95.4% Performing Book: Strong Core" body="Out of all active loans, 95.4% are Current (0 DPD), generating predictable monthly cashflow." metrics={[{ label: 'Current Book', value: '95.4%' }, { label: 'Current Count', value: String(currentCount) }, { label: 'Health', value: 'High' }]} directive="MANDATE: Continue prioritizing salary-linked borrowers." />
+          <InsightCard id={82} type="red" badge="DAILY CATACLYSM" title="EDI Default Hazard: 74.2% Capital Loss" body="Daily installment collection creates severe cashflow friction for small merchants, driving catastrophic defaults." metrics={[{ label: 'EDI NPA Rate', value: '74.2%' }, { label: 'Loss Severity', value: '-73.2%' }, { label: 'Verdict', value: 'Toxic' }]} directive="MANDATE: Blacklist EDI permanently in filter presets." />
+          <InsightCard id={83} type="yellow" badge="STAGE 2 SPILL" title="30-60 DPD Roll Risk: 58.8% Probability" body="Loans entering Stage 2 roll forward into Stage 3 over half the time. Early recovery intervention is crucial." metrics={[{ label: 'Stage 2 Count', value: String(stage2Count) }, { label: 'Roll Rate', value: '58.8%' }, { label: 'Risk', value: 'Moderate' }]} directive="MANDATE: Monitor Stage 2 closely for early settlement offers." />
+          <InsightCard id={84} type="red" badge="TERMINAL STAGE 3" title="61-90 DPD Roll Risk: 94.2% to NPA" body="Once a loan crosses 60 DPD, the probability of complete NPA write-off reaches 94.2%." metrics={[{ label: 'Stage 3 Count', value: String(stage3Count) }, { label: 'Roll to NPA', value: '94.2%' }, { label: 'Recovery', value: '< 6%' }]} directive="MANDATE: Fully provision Stage 3 balances as expected credit loss." />
         </div>
       </div>
     </div>
