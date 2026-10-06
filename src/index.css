@@ -485,31 +485,37 @@ body {
 }
 
 /* ==========================================================================
-   INSIGHTS CARDS SECTION (Crisp, High Contrast, Polished)
+   INSIGHTS CARDS SECTION (Square Format, High Contrast, Polished)
    ========================================================================== */
 .insights-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.35rem;
+  grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+  gap: 1.25rem;
   margin-top: 1.5rem;
   margin-bottom: 2.5rem;
 }
 
 .insight-card {
-  padding: 1.35rem;
+  aspect-ratio: 1 / 1;
+  min-height: 290px;
+  padding: 1.15rem;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-left: 4px solid var(--accent, var(--emerald));
+  border-top: 4px solid var(--accent, var(--emerald));
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .insight-card:hover {
-  box-shadow: var(--shadow-hover);
-  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  border-color: var(--accent);
 }
 
 .insight-card.green { --accent: var(--emerald); }
@@ -521,11 +527,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
 }
 
 .insight-id {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -533,68 +540,104 @@ body {
 }
 
 .insight-badge {
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 0.18rem 0.55rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.18rem 0.5rem;
   border-radius: var(--radius-full);
   background: var(--bg-elevated);
   color: var(--accent);
   text-transform: uppercase;
   border: 1px solid var(--border-subtle);
+  letter-spacing: 0.02em;
+}
+
+.insight-content-block {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
 }
 
 .insight-title {
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.35rem;
+  line-height: 1.3;
   letter-spacing: -0.01em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .insight-body {
-  font-size: 0.81rem;
+  font-size: 0.77rem;
   color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: 0.85rem;
-  flex: 1;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.insight-footer-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  flex-shrink: 0;
 }
 
 .insight-metric-row {
   display: flex;
-  gap: 0.65rem;
-  padding: 0.55rem 0.85rem;
+  gap: 0.5rem;
+  padding: 0.45rem 0.65rem;
   background: var(--bg-elevated);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  margin-bottom: 0.75rem;
 }
 
 .insight-metric-item {
   flex: 1;
+  min-width: 0;
 }
 
 .insight-metric-item span {
   display: block;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   color: var(--text-muted);
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .insight-metric-item strong {
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   color: var(--text-primary);
   font-weight: 800;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .insight-directive {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  padding: 0.55rem 0.85rem;
+  padding: 0.45rem 0.65rem;
   border-radius: var(--radius-sm);
   background: var(--bg-elevated);
   color: var(--text-primary);
-  border-left: 2px solid var(--accent);
+  border-left: 3px solid var(--accent);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
+
 
 /* ==========================================================================
    DATA TABLES

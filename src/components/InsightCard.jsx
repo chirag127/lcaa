@@ -28,25 +28,30 @@ export default function InsightCard({
         </span>
         {cardBadge && <span className="insight-badge">{cardBadge}</span>}
       </div>
-      <h4 className="insight-title">{title}</h4>
-      <p className="insight-body">{cardBody}</p>
 
-      {cardMetrics && cardMetrics.length > 0 && (
-        <div className="insight-metric-row">
-          {cardMetrics.map((m, idx) => (
-            <div key={idx} className="insight-metric-item">
-              <span>{m.label}</span>
-              <strong>{m.value}</strong>
-            </div>
-          ))}
-        </div>
-      )}
+      <div className="insight-content-block">
+        <h4 className="insight-title">{title}</h4>
+        <p className="insight-body">{cardBody}</p>
+      </div>
 
-      {cardDirective && (
-        <div className="insight-directive">
-          {cardDirective}
-        </div>
-      )}
+      <div className="insight-footer-block">
+        {cardMetrics && cardMetrics.length > 0 && (
+          <div className="insight-metric-row">
+            {cardMetrics.map((m, idx) => (
+              <div key={idx} className="insight-metric-item">
+                <span>{m.label}</span>
+                <strong>{m.value}</strong>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {cardDirective && (
+          <div className="insight-directive">
+            {cardDirective}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

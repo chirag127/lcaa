@@ -828,14 +828,25 @@ export default function TabAnnualized({ data, isDark = false }) {
         </table>
       </div>
 
-      {/* 10 Specialized Insight Cards */}
+      {/* 20 Specialized Insight Cards */}
       <div style={{ marginTop: '2.5rem' }}>
-        <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '1rem' }}>
-          Annualized Multiplier Underwriting Directives (Insights 11 – 20)
-        </h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+              Tenure Annualization & Compounding Velocity Directives (1 – 20)
+            </h3>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              Actionable rules for loan selection based on tenure-normalized turnover velocity, default loss drag, and compounding yield.
+            </p>
+          </div>
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, padding: '0.2rem 0.55rem', background: 'var(--emerald)', color: '#fff', borderRadius: '4px' }}>
+            20 Velocity Square Cards
+          </span>
+        </div>
+
         <div className="insights-grid">
           <InsightCard
-            id={11}
+            id={1}
             type="green"
             badge="VELOCITY MULTIPLIER"
             title="The 6.0x Velocity Engine on 2M Loans"
@@ -847,21 +858,9 @@ export default function TabAnnualized({ data, isDark = false }) {
             ]}
             directive="RULE: Treat 2-Month capital turnover velocity as your primary risk-adjusted profit engine."
           />
+
           <InsightCard
-            id={12}
-            type="red"
-            badge="TOXIC ANNUALIZED NPA"
-            title="The 6-Month Toxic Trap: 33.84% Annualized NPA"
-            body="While raw NPA is 16.92%, applying the 2.0x multiplier reveals an astronomical 33.84% Annualized Default Rate—the highest across the entire platform. 1 in 3 loans defaults annually."
-            metrics={[
-              { label: 'Raw NPA', value: '16.92%' },
-              { label: 'Multiplier', value: '2.0x' },
-              { label: 'Ann. NPA', value: '33.84%' }
-            ]}
-            directive="RULE: Blacklist 6-Month loans unconditionally; duration risk compounds into catastrophic default."
-          />
-          <InsightCard
-            id={13}
+            id={2}
             type="green"
             badge="PREPAYMENT VELOCITY"
             title="3-Month Hyper-Velocity: 69.1% Prepays in 45 Days"
@@ -873,8 +872,51 @@ export default function TabAnnualized({ data, isDark = false }) {
             ]}
             directive="RULE: Favor 3-Month loans with high bureau scores to capture prepayment reinvestment compounding."
           />
+
           <InsightCard
-            id={14}
+            id={3}
+            type="green"
+            badge="TRANSITION TENURE"
+            title="4-Month Tenure Yield Resilience (+34.23% ANR)"
+            body="4-Month loans generate 11.41% raw return (3.0x multiplier = +34.23% ANR) with 50.05% prepayment velocity. It offers strong yield when 2M/3M inventory is depleted."
+            metrics={[
+              { label: 'Multiplier', value: '3.0x' },
+              { label: 'Ann. Return', value: '+34.23%' },
+              { label: 'Prepay Rate', value: '50.05%' }
+            ]}
+            directive="RULE: Allocate up to 15% of deployment to 4-Month loans if priced at APR ≥ 46%."
+          />
+
+          <InsightCard
+            id={4}
+            type="green"
+            badge="INTERMEDIATE TENURE"
+            title="5-Month Tenure: Modest 15.68% Annualized NPA"
+            body="5-Month loans have an annualized loss drag of only 3.91% and deliver +32.72% Annualized Net Return. Borrowers exhibit 51.76% prepayment discipline."
+            metrics={[
+              { label: 'Ann. NPA', value: '15.68%' },
+              { label: 'Ann. Loss Drag', value: '3.91%' },
+              { label: 'Ann. Return', value: '+32.72%' }
+            ]}
+            directive="RULE: 5-Month loans are the absolute maximum duration threshold permissible in your book."
+          />
+
+          <InsightCard
+            id={5}
+            type="red"
+            badge="TOXIC ANNUALIZED NPA"
+            title="The 6-Month Toxic Trap: 33.84% Annualized NPA"
+            body="While raw NPA is 16.92%, applying the 2.0x multiplier reveals an astronomical 33.84% Annualized Default Rate—the highest across the entire platform. 1 in 3 loans defaults annually."
+            metrics={[
+              { label: 'Raw NPA', value: '16.92%' },
+              { label: 'Multiplier', value: '2.0x' },
+              { label: 'Ann. NPA', value: '33.84%' }
+            ]}
+            directive="RULE: Blacklist 6-Month loans unconditionally; duration risk compounds into catastrophic default."
+          />
+
+          <InsightCard
+            id={6}
             type="red"
             badge="ZERO VELOCITY TRAP"
             title="12-Month Multiplier is 1.0x: Capital Trapped for Zero Gain"
@@ -886,25 +928,13 @@ export default function TabAnnualized({ data, isDark = false }) {
             ]}
             directive="RULE: Ban 12-Month loans. Never lock investor capital for 1 year in unsecured credit."
           />
+
           <InsightCard
-            id={15}
-            type="green"
-            badge="SCORE ALPHA"
-            title="Score Band 740–779 Delivers Peak Annualized Alpha (+36.8%)"
-            body="When normalized across turnover cycles, borrowers with scores 740–779 consistently deliver +36.8% Annualized Net Return while holding annualized defaults under 5%."
-            metrics={[
-              { label: 'Score Band', value: '740–779' },
-              { label: 'Ann. NPA', value: '< 5.0%' },
-              { label: 'Ann. Return', value: '+36.8%' }
-            ]}
-            directive="RULE: Allocate 70%+ of deployment capital to LenDenClub scores between 740 and 779."
-          />
-          <InsightCard
-            id={16}
+            id={7}
             type="yellow"
             badge="FEE DRAG MULTIPLIER"
             title="Short Loans Multiply Platform Fees: Requires ≥ 44% APR"
-            body="LenDenClub charges 1% to 6% per loan cycle. On 2-Month loans turning over 6 times, annualized platform fee drag reaches 5.85%. Only loans with APR ≥ 46% provide sufficient buffer."
+            body="LenDenClub charges ~1% per cycle. On 2-Month loans turning over 6 times, annualized platform fee drag reaches 5.85%. Only loans with APR ≥ 46% provide sufficient buffer."
             metrics={[
               { label: 'Cycle Fee', value: '0.98%' },
               { label: 'Ann. Fee Drag', value: '5.85%' },
@@ -912,21 +942,23 @@ export default function TabAnnualized({ data, isDark = false }) {
             ]}
             directive="RULE: Enforce a strict minimum APR floor of 44%; never fund sub-40% loans."
           />
+
           <InsightCard
-            id={17}
-            type="red"
-            badge="TICKET SIZE MULTIPLIER"
-            title="Tickets > ₹1,000 Suffer 38.2% Annualized Default"
-            body="Borrowers granted lent tickets of ₹1,250–₹4,000 experience an annualized default rate of 38.2%, completely erasing interest margins and producing negative net alpha."
+            id={8}
+            type="green"
+            badge="ALPHA SPREAD"
+            title="Annualized Net Alpha Spread Peaks at +37.77%"
+            body="Gross contractual APR minus Annualized Capital Loss Drag minus Annualized Fee Drag yields net institutional alpha. 2M and 3M deliver +35.4% and +37.8% alpha spread."
             metrics={[
-              { label: 'Ticket Size', value: '> ₹1,000' },
-              { label: 'Ann. NPA', value: '38.2%' },
-              { label: 'Net Spread', value: 'Negative' }
+              { label: '3M Alpha Spread', value: '+37.77%' },
+              { label: '6M Alpha Spread', value: '+26.39%' },
+              { label: '12M Alpha Spread', value: '+10.41%' }
             ]}
-            directive="RULE: Restrict ticket size to exactly ₹250 or ₹500. Diversify across 500+ micro-tickets."
+            directive="RULE: Target assets with Annualized Net Alpha Spread ≥ 32.0%."
           />
+
           <InsightCard
-            id={18}
+            id={9}
             type="green"
             badge="COMPOUNDING SPREAD"
             title="₹10,000 Compounding Spread: ₹13,777 (3M) vs ₹11,041 (12M)"
@@ -938,8 +970,9 @@ export default function TabAnnualized({ data, isDark = false }) {
             ]}
             directive="RULE: Reinvest all returned principal and interest immediately to harness exponential velocity."
           />
+
           <InsightCard
-            id={19}
+            id={10}
             type="info"
             badge="EFFICIENCY INDEX"
             title="Capital Efficiency Index Peaks at 8.1x on 2-Month Duration"
@@ -951,6 +984,133 @@ export default function TabAnnualized({ data, isDark = false }) {
             ]}
             directive="RULE: Optimize portfolio allocation to maintain an aggregate Efficiency Index above 3.0x."
           />
+
+          <InsightCard
+            id={11}
+            type="green"
+            badge="SCORE ALPHA"
+            title="Score Band 740–779 Delivers Peak Annualized Alpha (+36.8%)"
+            body="When normalized across turnover cycles, borrowers with scores 740–779 consistently deliver +36.8% Annualized Net Return while holding annualized defaults under 5%."
+            metrics={[
+              { label: 'Score Band', value: '740–779' },
+              { label: 'Ann. NPA', value: '< 5.0%' },
+              { label: 'Ann. Return', value: '+36.8%' }
+            ]}
+            directive="RULE: Allocate 70%+ of deployment capital to LenDenClub scores between 740 and 779."
+          />
+
+          <InsightCard
+            id={12}
+            type="green"
+            badge="PRIME TIER"
+            title="Score Band 780+ Achieves 0.00% Annualized Default"
+            body="Borrowers with internal LenDenClub scores 780+ have zero defaults and zero active delinquency, generating a spotless +34.2% Annualized Net Return."
+            metrics={[
+              { label: 'Score Band', value: '780+' },
+              { label: 'Ann. NPA', value: '0.00%' },
+              { label: 'Ann. Return', value: '+34.20%' }
+            ]}
+            directive="RULE: Fund 100% of available loans in the 780+ score band with zero allocation limits."
+          />
+
+          <InsightCard
+            id={13}
+            type="red"
+            badge="SCORE HAZARD"
+            title="Sub-720 Scores Suffer 31.6% Annualized Default"
+            body="Borrowers scored below 720 exhibit a severe 31.6% Annualized Default Rate. Even with 48% contractual APR, credit losses erode net yield down to marginal levels."
+            metrics={[
+              { label: 'Score Band', value: '< 720' },
+              { label: 'Ann. NPA', value: '31.60%' },
+              { label: 'Net Margin', value: 'Unstable' }
+            ]}
+            directive="RULE: Never fund sub-720 scores unless restricted strictly to 2-Month duration."
+          />
+
+          <InsightCard
+            id={14}
+            type="red"
+            badge="TICKET SIZE MULTIPLIER"
+            title="Tickets > ₹1,000 Suffer 38.2% Annualized Default"
+            body="Borrowers granted lent tickets of ₹1,250–₹4,000 experience an annualized default rate of 38.2%, completely erasing interest margins and producing negative net alpha."
+            metrics={[
+              { label: 'Ticket Size', value: '> ₹1,000' },
+              { label: 'Ann. NPA', value: '38.2%' },
+              { label: 'Net Spread', value: 'Negative' }
+            ]}
+            directive="RULE: Restrict ticket size to exactly ₹250 or ₹500. Diversify across 500+ micro-tickets."
+          />
+
+          <InsightCard
+            id={15}
+            type="green"
+            badge="MICRO DIVERSIFICATION"
+            title="₹250 Micro-Ticket Safety Dispersion"
+            body="At ₹250 lent size, the Annualized Default Rate drops to 14.2% and net realized return reaches +18.5%. Diversification across 1,000+ borrowers completely prevents portfolio drawdown shocks."
+            metrics={[
+              { label: 'Lent Ticket', value: '₹250' },
+              { label: 'Ann. Return', value: '+18.50%' },
+              { label: 'Diversification', value: 'Max' }
+            ]}
+            directive="RULE: Default your automated investment rule to ₹250 per loan."
+          />
+
+          <InsightCard
+            id={16}
+            type="info"
+            badge="EFFECTIVE VELOCITY"
+            title="Effective Cycle Duration: 45 Days on 3-Month Paper"
+            body="Because 69.1% of 3M borrowers prepay, actual capital duration is 45 days, not 90 days. This doubles cash velocity and allows capital to be redeployed 8 times each year."
+            metrics={[
+              { label: 'Nominal Term', value: '90 Days' },
+              { label: 'Effective Term', value: '45 Days' },
+              { label: 'Turnover Gain', value: '2.0x' }
+            ]}
+            directive="RULE: Treat prepayment liquidity as bonus compounding fuel; monitor daily wallet cash."
+          />
+
+          <InsightCard
+            id={17}
+            type="yellow"
+            badge="CASH DRAG DEFENSE"
+            title="Reinvestment Latency Erode Velocity: Reinvest < 24 Hours"
+            body="Idle cash in the LenDenClub wallet earning 0% destroys velocity compounding. Allowing cash to sit idle for 15 days cuts 2-Month annualized return from +35.4% to +26.1%."
+            metrics={[
+              { label: '15-Day Idle Drag', value: '-9.30%' },
+              { label: 'Target Latency', value: '< 24 Hours' },
+              { label: 'Compounding', value: 'Sensitive' }
+            ]}
+            directive="RULE: Enable auto-investment with strict criteria to ensure zero idle wallet balance."
+          />
+
+          <InsightCard
+            id={18}
+            type="green"
+            badge="MARGIN FLOOR"
+            title="Enforce Gross APR Floor of 44.0% to Beat Fee Friction"
+            body="Platform fee drag of 5.85% requires a minimum contractual APR of 44% to generate institutional alpha. Loans below 44% produce anemic net spreads."
+            metrics={[
+              { label: 'Min APR Floor', value: '44.0%' },
+              { label: 'Fee Drag Buffer', value: '3.5x' },
+              { label: 'Target Alpha', value: '≥ 30.0%' }
+            ]}
+            directive="DIRECTIVE: Set minimum APR filter to 44.0% in all auto-invest profiles."
+          />
+
+          <InsightCard
+            id={19}
+            type="red"
+            badge="TENURE CEILING"
+            title="Hard Ceiling at 5 Months Duration"
+            body="Historical data proves that beyond 5 months, credit risk explodes (6M NPA: 16.92%, 12M NPA: 20.69%) while velocity collapses. There is zero rational justification for funding >5M paper."
+            metrics={[
+              { label: 'Max Safe Tenure', value: '5 Months' },
+              { label: '6M+ Hazard', value: 'Severe' },
+              { label: 'Action', value: 'Hard Cap' }
+            ]}
+            directive="RULE: Never underwrite or approve loans with tenure > 5 Months."
+          />
+
           <InsightCard
             id={20}
             type="green"
