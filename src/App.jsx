@@ -13,6 +13,7 @@ import {
 } from './utils/portfolioEngine';
 
 import TabExecutive from './views/TabExecutive';
+import TabAnnualized from './views/TabAnnualized';
 import TabBorrowerProfile from './views/TabBorrowerProfile';
 import TabScores from './views/TabScores';
 import TabTenure from './views/TabTenure';
@@ -319,7 +320,8 @@ export default function App() {
           ) : (
             <>
               {activeTab === 'tab-executive' && <TabExecutive data={dynamicData} isDark={isDark} />}
-              {activeTab === 'tab-annualized' && <TabBorrowerProfile data={dynamicData} isDark={isDark} />}
+              {activeTab === 'tab-annualized' && <TabAnnualized data={dynamicData} isDark={isDark} />}
+              {activeTab === 'tab-demographics' && <TabBorrowerProfile data={dynamicData} isDark={isDark} />}
               {activeTab === 'tab-scores' && <TabScores data={dynamicData} isDark={isDark} />}
               {activeTab === 'tab-tenure' && <TabTenure data={dynamicData} isDark={isDark} />}
               {activeTab === 'tab-tickets' && <TabTickets data={dynamicData} isDark={isDark} />}

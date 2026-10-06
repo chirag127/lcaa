@@ -22,20 +22,35 @@ function buildBucketStats(loans, classifier) {
     const key = classifier(l);
     if (key === null) continue;
     if (!buckets[key]) {
-      buckets[key] = { label: key, count: 0, npa: 0, disbursed: 0, profit: 0 };
+      buckets[key] = { label: key, count: 0, npa: 0, disbursed: 0, profit: 0, total_mult_weighted: 0, total_tenure_weighted: 0 };
     }
     const b = buckets[key];
     b.count++;
-    b.disbursed += (l.amount ?? 0);
-    b.profit += (l.net_profit ?? 0);
+    const amt = (l.amount ?? 0);
+    b.disbursed += amt;
+    const calcProfit = (l.interest_rec || 0) - (l.fee || 0) - (l.npa || 0);
+    b.profit += (l.net_profit !== undefined && l.net_profit !== null) ? l.net_profit : (calcProfit || 0);
     if (l.npa) b.npa++;
+    const t = Number(l.tenure) || 3;
+    const mult = t > 0 ? (12.0 / t) : 4.0;
+    b.total_mult_weighted += amt * mult;
+    b.total_tenure_weighted += amt * t;
   }
-  // Compute derived metrics
+  // Compute derived annualized metrics
   const total = loans.length || 1;
   for (const b of Object.values(buckets)) {
+    const disb = b.disbursed || 1;
+    const w_mult = b.disbursed > 0 ? (b.total_mult_weighted / disb) : 1;
+    b.w_mult = w_mult;
+    b.avg_tenure = b.disbursed > 0 ? (b.total_tenure_weighted / disb) : 3;
     b.pct = b.count > 0 ? (b.count / total * 100) : 0;
-    b.npa_pct = b.count > 0 ? (b.npa / b.count * 100) : 0;
-    b.margin_pct = b.disbursed > 0 ? (b.profit / b.disbursed * 100) : 0;
+    b.raw_npa_pct = b.count > 0 ? (b.npa / b.count * 100) : 0;
+    // User requirement: Annualize every percentage!
+    b.ann_npa_pct = b.raw_npa_pct * w_mult;
+    b.npa_pct = b.ann_npa_pct; // default to annualized
+    b.raw_margin_pct = b.disbursed > 0 ? (b.profit / disb * 100) : 0;
+    b.ann_margin_pct = b.raw_margin_pct * w_mult;
+    b.margin_pct = b.ann_margin_pct; // default to annualized
     b.avg_amount = b.count > 0 ? (b.disbursed / b.count) : 0;
   }
   return buckets;
@@ -247,29 +262,49 @@ export function computeDemographicKPIs(loans) {
   const inc50to100Profit = inc50to100.reduce((s, l) => s + (l.net_profit || 0), 0);
   const inc50to100Disb = inc50to100.reduce((s, l) => s + (l.amount || 0), 0);
 
+  const getWMult = (arr) => {
+    const d = arr.reduce((s, l) => s + (l.amount || 0), 0);
+    if (d === 0) return 4.0;
+    return arr.reduce((s, l) => s + (l.amount || 0) * (Number(l.tenure) > 0 ? 12.0 / Number(l.tenure) : 4.0), 0) / d;
+  };
+
+  const selfMult = getWMult(selfEmp);
+  const salMult = getWMult(salaried);
+  const crifMult = getWMult(crif800Plus);
+  const ldcMult = getWMult(ldc776Plus);
+  const age31to40Mult = getWMult(age31to40);
+  const incMult = getWMult(inc50to100);
+
+  const selfRawNpa = selfEmp.length > 0 ? (selfEmpNPA / selfEmp.length * 100) : 0;
+  const salRawNpa = salaried.length > 0 ? (salariedNPA / salaried.length * 100) : 0;
+  const crifRawNpa = crif800Plus.length > 0 ? (crif800NPA / crif800Plus.length * 100) : 0;
+  const ldcRawNpa = ldc776Plus.length > 0 ? (ldc776NPA / ldc776Plus.length * 100) : 0;
+
   return {
-    totalProfiles: enriched.length || loans.length || 3967,
+    totalProfiles: enriched.length || loans.length || 5276,
     totalEnriched: enriched.length,
     totalLoans: loans.length,
     enrichmentPct: loans.length > 0 ? (enriched.length / loans.length * 100).toFixed(1) : 0,
     safestAge: '31 – 40',
-    safestAgeNPA: '4.8',
+    safestAgeNPA: (4.8 * age31to40Mult).toFixed(1),
     safestProfession: 'Self-Employed',
-    safestProfNPA: selfEmp.length > 0 ? (selfEmpNPA / selfEmp.length * 100).toFixed(1) : '1.5',
+    safestProfNPA: (selfRawNpa * selfMult).toFixed(1),
     optimalIncome: '₹75k – ₹100k',
     bestLDCScore: '776 – 800',
     worstRiskFactor: 'Daily EDI / CRIF >800',
     selfEmpCount: selfEmp.length,
-    selfEmpNPAPct: selfEmp.length > 0 ? (selfEmpNPA / selfEmp.length * 100).toFixed(2) : 0,
-    salariedNPAPct: salaried.length > 0 ? (salariedNPA / salaried.length * 100).toFixed(2) : 0,
+    selfEmpNPAPct: (selfRawNpa * selfMult).toFixed(2),
+    selfEmpRawNPAPct: selfRawNpa.toFixed(2),
+    salariedNPAPct: (salRawNpa * salMult).toFixed(2),
+    salariedRawNPAPct: salRawNpa.toFixed(2),
     crif800Count: crif800Plus.length,
-    crif800NPAPct: crif800Plus.length > 0 ? (crif800NPA / crif800Plus.length * 100).toFixed(1) : 0,
+    crif800NPAPct: (crifRawNpa * crifMult).toFixed(1),
     ldc776Count: ldc776Plus.length,
-    ldc776NPAPct: ldc776Plus.length > 0 ? (ldc776NPA / ldc776Plus.length * 100).toFixed(1) : 0,
+    ldc776NPAPct: (ldcRawNpa * ldcMult).toFixed(1),
     age31to40Count: age31to40.length,
-    age31to40Margin: age31to40Disb > 0 ? (age31to40Profit / age31to40Disb * 100).toFixed(2) : 0,
+    age31to40Margin: age31to40Disb > 0 ? ((age31to40Profit / age31to40Disb * 100) * age31to40Mult).toFixed(2) : 0,
     inc50to100Count: inc50to100.length,
-    inc50to100Margin: inc50to100Disb > 0 ? (inc50to100Profit / inc50to100Disb * 100).toFixed(2) : 0
+    inc50to100Margin: inc50to100Disb > 0 ? ((inc50to100Profit / inc50to100Disb * 100) * incMult).toFixed(2) : 0
   };
 }
 

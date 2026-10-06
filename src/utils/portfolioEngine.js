@@ -144,6 +144,11 @@ function computeCohortSummary(loans, keyExtractor, order = null) {
     const tenure_net = (c.net_profit / disb) * 100;
     const ann_net = tenure_net * w_mult;
 
+    const raw_npa_count_pct = (c.npa_count / (c.loans || 1)) * 100;
+    const ann_npa_count_pct = raw_npa_count_pct * w_mult;
+    const avg_apr = c.total_apr_weighted / disb;
+    const ann_alpha_spread = avg_apr - ann_fee - ann_npa;
+
     result.push({
       cohort: c.cohort,
       loans: c.loans,
@@ -153,18 +158,25 @@ function computeCohortSummary(loans, keyExtractor, order = null) {
       platform_fee: Math.round(c.platform_fee * 100) / 100,
       npa_amount: Math.round(c.npa_amount * 100) / 100,
       npa_count: c.npa_count,
-      npa_count_pct: Math.round((c.npa_count / (c.loans || 1)) * 10000) / 100,
+      raw_npa_count_pct: Math.round(raw_npa_count_pct * 100) / 100,
+      ann_npa_count_pct: Math.round(ann_npa_count_pct * 100) / 100,
+      npa_count_pct: Math.round(raw_npa_count_pct * 100) / 100,
       closed_count: c.closed_count,
       active_count: c.active_count,
       net_profit: Math.round(c.net_profit * 100) / 100,
       avg_score: c.score_count > 0 ? Math.round((c.total_score / c.score_count) * 10) / 10 : 0,
-      avg_apr: Math.round((c.total_apr_weighted / disb) * 100) / 100,
+      avg_apr: Math.round(avg_apr * 100) / 100,
+      raw_npa_pct: Math.round(tenure_npa * 100) / 100,
       tenure_npa_pct: Math.round(tenure_npa * 100) / 100,
       ann_npa_pct: Math.round(ann_npa * 100) / 100,
+      ann_loss_drag_pct: Math.round(ann_npa * 100) / 100,
+      raw_fee_pct: Math.round(tenure_fee * 100) / 100,
       tenure_fee_pct: Math.round(tenure_fee * 100) / 100,
       ann_fee_pct: Math.round(ann_fee * 100) / 100,
+      raw_net_pct: Math.round(tenure_net * 100) / 100,
       tenure_net_pct: Math.round(tenure_net * 100) / 100,
       ann_net_pct: Math.round(ann_net * 100) / 100,
+      ann_alpha_spread: Math.round(ann_alpha_spread * 100) / 100,
       annualization_mult: Math.round(w_mult * 100) / 100
     });
   }
