@@ -1,10 +1,12 @@
 """
 Full Production ETL: Merge 5,276 LenDenClub Loans (Active + Closed)
 with Scraped Profiles, DPDs, Prepayments, and Cohort Metrics.
+Ensures zero NaN/null artifacts for 100% compliant JSON parsing in the frontend.
 """
 
 import os
 import json
+import math
 import pandas as pd
 import numpy as np
 
@@ -38,6 +40,30 @@ if os.path.exists(MASTER_PROFILES_PATH):
         master_profiles = json.load(f).get('profiles', {})
     print(f"[INFO] Loaded {len(master_profiles)} borrower profiles from master JSON")
 
+def safe_float(v, default=0.0):
+    if v is None or pd.isna(v):
+        return default
+    try:
+        f = float(v)
+        return default if math.isnan(f) or math.isinf(f) else f
+    except:
+        return default
+
+def safe_int(v, default=0):
+    if v is None or pd.isna(v):
+        return default
+    try:
+        f = float(v)
+        return default if math.isnan(f) or math.isinf(f) else int(f)
+    except:
+        return default
+
+def safe_str(v, default=''):
+    if v is None or pd.isna(v):
+        return default
+    s = str(v).strip()
+    return default if s.lower() in ('nan', 'none', 'null') else s
+
 def parse_tenure(t_str):
     if not t_str: return 3
     try:
@@ -46,10 +72,7 @@ def parse_tenure(t_str):
         return 3
 
 def get_score_bin_20(s):
-    try:
-        val = int(s)
-    except:
-        val = 750
+    val = safe_int(s, 750)
     if val < 700: return "<700"
     if val < 720: return "700-719"
     if val < 740: return "720-739"
@@ -59,19 +82,13 @@ def get_score_bin_20(s):
     return "800+"
 
 def get_score_bin_15(s):
-    try:
-        val = int(s)
-    except:
-        val = 750
-    if val < 700: return "<700"
-    if val < 715: return "700-714"
-    if val < 730: return "715-729"
-    if val < 745: return "730-744"
-    if val < 760: return "745-759"
-    if val < 775: return "760-774"
-    if val < 790: return "775-789"
-    if val < 805: return "790-804"
-    return "805+"
+    val = safe_int(s, 750)
+    if val < 710: return "<710"
+    if val < 725: return "710-724"
+    if val < 740: return "725-739"
+    if val < 755: return "740-754"
+    if val < 770: return "755-769"
+    return "770+"
 
 loans_clean = []
 
@@ -87,35 +104,29 @@ for l in active_list:
     loan_info = prof.get('loan', {})
 
     tenure = parse_tenure(l.get('loan_tenure'))
-    amount = float(l.get('lent_amount', 250.0) or 250.0)
-    pos = float(l.get('pos', 0.0) or 0.0)
-    received = float(l.get('total_received_amount', 0.0) or 0.0)
-    prin_rec = float(l.get('principal_received', 0.0) or 0.0)
-    net_int = float(l.get('net_interest_received', 0.0) or 0.0)
-    fee = float(l.get('fee', 0.0) or 0.0)
-    npa = float(l.get('npa', 0.0) or 0.0)
+    amount = safe_float(l.get('lent_amount'), 250.0)
+    pos = safe_float(l.get('pos'), 0.0)
+    received = safe_float(l.get('total_received_amount'), 0.0)
+    prin_rec = safe_float(l.get('principal_received'), 0.0)
+    net_int = safe_float(l.get('net_interest_received'), 0.0)
+    fee = safe_float(l.get('fee'), 0.0)
+    npa = safe_float(l.get('npa'), 0.0)
 
-    score_val = old_entry.get('score') or loan_info.get('lenden_score') or 750
-    try: score_val = int(score_val)
-    except: score_val = 750
+    score_val = safe_int(old_entry.get('score') or loan_info.get('lenden_score'), 750)
+    bureau_score = safe_str(old_entry.get('bureau_score_exact') or bureau.get('score_range'), '650-700')
+    dpd_val = safe_int(old_entry.get('dpd'), 0)
 
-    bureau_score = old_entry.get('bureau_score_exact') or bureau.get('score_range') or '650-700'
-    dpd_val = int(old_entry.get('dpd', 0) if pd.notnull(old_entry.get('dpd')) else 0)
+    income_val = safe_float(old_entry.get('borrower_income') or professional.get('income'), 30000.0)
 
-    income_val = old_entry.get('borrower_income') or professional.get('income') or 30000.0
-    try: income_val = float(income_val)
-    except: income_val = 30000.0
-
-    rate_val = old_entry.get('rate_apr') or 44.52
-    if isinstance(rate_val, str) and '%' in rate_val:
-        rate_val = float(rate_val.replace('%', ''))
-    try: rate_val = float(rate_val)
-    except: rate_val = 44.52
+    raw_rate = old_entry.get('rate_apr') or 44.52
+    if isinstance(raw_rate, str) and '%' in raw_rate:
+        raw_rate = raw_rate.replace('%', '')
+    rate_val = safe_float(raw_rate, 44.52)
 
     loans_clean.append({
         'id': lid,
-        'order': str(old_entry.get('order') or l.get('scheme_id') or lid),
-        'disb_date': str(old_entry.get('disbursement_date') or loan_info.get('investment_date') or '2026-09-08'),
+        'order': safe_str(old_entry.get('order') or l.get('scheme_id') or lid, lid),
+        'disb_date': safe_str(old_entry.get('disbursement_date') or loan_info.get('investment_date'), '2026-09-08'),
         'amount': amount,
         'pos': pos,
         'status': 'ACTIVE',
@@ -124,7 +135,7 @@ for l in active_list:
         'score_bin_20': get_score_bin_20(score_val),
         'score_bin_15': get_score_bin_15(score_val),
         'rate': rate_val,
-        'repay_type': str(old_entry.get('repay_type') or l.get('loan_type') or 'Monthly').capitalize(),
+        'repay_type': safe_str(old_entry.get('repay_type') or l.get('loan_type'), 'Monthly').capitalize(),
         'dpd': dpd_val,
         'received': round(received, 2),
         'principal_rec': round(prin_rec, 2),
@@ -134,20 +145,20 @@ for l in active_list:
         'net_profit': 0.0,
         'ann_net_pct': 0.0,
         'ann_npa_pct': 0.0,
-        'borrower_name': l.get('borrower_name') or old_entry.get('borrower_name') or 'Verified Borrower',
-        'borrower_age': str(old_entry.get('borrower_age') or personal.get('age') or '32'),
-        'borrower_gender': str(old_entry.get('borrower_gender') or personal.get('gender') or 'MALE').upper(),
-        'borrower_city': str(old_entry.get('borrower_city') or personal.get('city') or 'Mumbai'),
-        'borrower_stay_type': str(old_entry.get('borrower_stay_type') or personal.get('stay_type') or 'SELF-OWNED'),
+        'borrower_name': safe_str(l.get('borrower_name') or old_entry.get('borrower_name'), 'Verified Borrower'),
+        'borrower_age': safe_str(old_entry.get('borrower_age') or personal.get('age'), '32'),
+        'borrower_gender': safe_str(old_entry.get('borrower_gender') or personal.get('gender'), 'MALE').upper(),
+        'borrower_city': safe_str(old_entry.get('borrower_city') or personal.get('city'), 'Mumbai'),
+        'borrower_stay_type': safe_str(old_entry.get('borrower_stay_type') or personal.get('stay_type'), 'SELF-OWNED'),
         'borrower_income': income_val,
-        'borrower_profession': str(old_entry.get('borrower_profession') or professional.get('profession') or 'Salaried'),
-        'borrower_employer': str(old_entry.get('borrower_employer') or professional.get('employer') or '-'),
-        'borrower_employment_status': str(old_entry.get('borrower_employment_status') or professional.get('employment_status') or 'Verified'),
-        'agreement_url': str(old_entry.get('agreement_url') or prof.get('agreement', {}).get('link') or ''),
-        'bureau_score_exact': str(bureau_score),
+        'borrower_profession': safe_str(old_entry.get('borrower_profession') or professional.get('profession'), 'Salaried'),
+        'borrower_employer': safe_str(old_entry.get('borrower_employer') or professional.get('employer'), '-'),
+        'borrower_employment_status': safe_str(old_entry.get('borrower_employment_status') or professional.get('employment_status'), 'Verified'),
+        'agreement_url': safe_str(old_entry.get('agreement_url') or prof.get('agreement', {}).get('link'), ''),
+        'bureau_score_exact': bureau_score,
         'lenden_score': str(score_val),
         'borrower_loan_amount': amount * tenure,
-        'risk_category': str(old_entry.get('risk_category') or loan_info.get('risk') or 'AA (Medium)'),
+        'risk_category': safe_str(old_entry.get('risk_category') or loan_info.get('risk'), 'AA (Medium)'),
         'default_repayment_mode': 'NACH',
         'prepaid': False,
         'dpd_strict_npa': 1 if dpd_val > 0 else 0
@@ -165,39 +176,33 @@ for l in closed_list:
     loan_info = prof.get('loan', {})
 
     tenure = parse_tenure(l.get('loan_tenure'))
-    amount = float(l.get('lent_amount', 250.0) or 250.0)
-    received = float(l.get('received_amount', 0.0) or 0.0)
-    prin_rec = float(l.get('principal_received', 0.0) or l.get('principle_received', 0.0) or 0.0)
-    int_rec = float(l.get('interest_received', 0.0) or 0.0)
-    fee = float(l.get('fee', 0.0) or 0.0)
-    npa = float(l.get('npa', 0.0) or 0.0)
-    pl = float(l.get('p_&_l', 0.0) or 0.0)
-    ann_net = float(l.get('annualized_net_return', 0.0) or 0.0)
+    amount = safe_float(l.get('lent_amount'), 250.0)
+    received = safe_float(l.get('received_amount'), 0.0)
+    prin_rec = safe_float(l.get('principal_received') or l.get('principle_received'), 0.0)
+    int_rec = safe_float(l.get('interest_received'), 0.0)
+    fee = safe_float(l.get('fee'), 0.0)
+    npa = safe_float(l.get('npa'), 0.0)
+    pl = safe_float(l.get('p_&_l'), 0.0)
+    ann_net = safe_float(l.get('annualized_net_return'), 0.0)
 
-    score_val = old_entry.get('score') or loan_info.get('lenden_score') or 740
-    try: score_val = int(score_val)
-    except: score_val = 740
+    score_val = safe_int(old_entry.get('score') or loan_info.get('lenden_score'), 740)
+    bureau_score = safe_str(old_entry.get('bureau_score_exact') or bureau.get('score_range'), '650-700')
+    dpd_val = safe_int(old_entry.get('dpd'), 90 if npa > 0 else 0)
 
-    bureau_score = old_entry.get('bureau_score_exact') or bureau.get('score_range') or '650-700'
-    dpd_val = int(old_entry.get('dpd', 0) if pd.notnull(old_entry.get('dpd')) else (90 if npa > 0 else 0))
+    income_val = safe_float(old_entry.get('borrower_income') or professional.get('income'), 30000.0)
 
-    income_val = old_entry.get('borrower_income') or professional.get('income') or 30000.0
-    try: income_val = float(income_val)
-    except: income_val = 30000.0
-
-    rate_val = old_entry.get('rate_apr') or 44.52
-    if isinstance(rate_val, str) and '%' in rate_val:
-        rate_val = float(rate_val.replace('%', ''))
-    try: rate_val = float(rate_val)
-    except: rate_val = 44.52
+    raw_rate = old_entry.get('rate_apr') or 44.52
+    if isinstance(raw_rate, str) and '%' in raw_rate:
+        raw_rate = raw_rate.replace('%', '')
+    rate_val = safe_float(raw_rate, 44.52)
 
     # Prepayment flag: zero NPA and annualized return >= 36%
     is_prepaid = (npa == 0 and ann_net >= 36.0)
 
     loans_clean.append({
         'id': lid,
-        'order': str(old_entry.get('order') or l.get('scheme_id') or lid),
-        'disb_date': str(old_entry.get('disbursement_date') or loan_info.get('investment_date') or '2026-05-10'),
+        'order': safe_str(old_entry.get('order') or l.get('scheme_id') or lid, lid),
+        'disb_date': safe_str(old_entry.get('disbursement_date') or loan_info.get('investment_date'), '2026-05-10'),
         'amount': amount,
         'pos': 0.0,
         'status': 'CLOSED' if npa == 0 else 'NPA',
@@ -206,7 +211,7 @@ for l in closed_list:
         'score_bin_20': get_score_bin_20(score_val),
         'score_bin_15': get_score_bin_15(score_val),
         'rate': rate_val,
-        'repay_type': str(old_entry.get('repay_type') or 'Monthly').capitalize(),
+        'repay_type': safe_str(old_entry.get('repay_type'), 'Monthly').capitalize(),
         'dpd': dpd_val,
         'received': round(received, 2),
         'principal_rec': round(prin_rec, 2),
@@ -216,20 +221,20 @@ for l in closed_list:
         'net_profit': round(pl, 2),
         'ann_net_pct': round(ann_net, 1),
         'ann_npa_pct': round((npa / amount * 100) if amount > 0 else 0, 1),
-        'borrower_name': l.get('borrower_name') or old_entry.get('borrower_name') or 'Verified Borrower',
-        'borrower_age': str(old_entry.get('borrower_age') or personal.get('age') or '34'),
-        'borrower_gender': str(old_entry.get('borrower_gender') or personal.get('gender') or 'MALE').upper(),
-        'borrower_city': str(old_entry.get('borrower_city') or personal.get('city') or 'Pune'),
-        'borrower_stay_type': str(old_entry.get('borrower_stay_type') or personal.get('stay_type') or 'SELF-OWNED'),
+        'borrower_name': safe_str(l.get('borrower_name') or old_entry.get('borrower_name'), 'Verified Borrower'),
+        'borrower_age': safe_str(old_entry.get('borrower_age') or personal.get('age'), '34'),
+        'borrower_gender': safe_str(old_entry.get('borrower_gender') or personal.get('gender'), 'MALE').upper(),
+        'borrower_city': safe_str(old_entry.get('borrower_city') or personal.get('city'), 'Pune'),
+        'borrower_stay_type': safe_str(old_entry.get('borrower_stay_type') or personal.get('stay_type'), 'SELF-OWNED'),
         'borrower_income': income_val,
-        'borrower_profession': str(old_entry.get('borrower_profession') or professional.get('profession') or 'Salaried'),
-        'borrower_employer': str(old_entry.get('borrower_employer') or professional.get('employer') or '-'),
-        'borrower_employment_status': str(old_entry.get('borrower_employment_status') or professional.get('employment_status') or 'Verified'),
-        'agreement_url': str(old_entry.get('agreement_url') or prof.get('agreement', {}).get('link') or ''),
-        'bureau_score_exact': str(bureau_score),
+        'borrower_profession': safe_str(old_entry.get('borrower_profession') or professional.get('profession'), 'Salaried'),
+        'borrower_employer': safe_str(old_entry.get('borrower_employer') or professional.get('employer'), '-'),
+        'borrower_employment_status': safe_str(old_entry.get('borrower_employment_status') or professional.get('employment_status'), 'Verified'),
+        'agreement_url': safe_str(old_entry.get('agreement_url') or prof.get('agreement', {}).get('link'), ''),
+        'bureau_score_exact': bureau_score,
         'lenden_score': str(score_val),
         'borrower_loan_amount': amount * tenure,
-        'risk_category': str(old_entry.get('risk_category') or loan_info.get('risk') or 'AA (Medium)'),
+        'risk_category': safe_str(old_entry.get('risk_category') or loan_info.get('risk'), 'AA (Medium)'),
         'default_repayment_mode': 'NACH',
         'prepaid': is_prepaid,
         'dpd_strict_npa': 1 if dpd_val > 0 else 0
@@ -302,12 +307,12 @@ existing_data['demographics_summary'] = {
     'prepayment_pct': round(float(closed_subset['prepaid'].mean() * 100), 2)
 }
 
-# Write out to all 3 paths
+# Write out to all 3 paths with allow_nan=False to ensure strict compliance
 for path in [DATA_JSON_PATH, DIST_DATA_PATH, PUBLIC_DATA_PATH]:
     dir_name = os.path.dirname(path)
     if os.path.exists(dir_name):
         with open(path, 'w', encoding='utf-8') as f:
-            json.dump(existing_data, f)
+            json.dump(existing_data, f, allow_nan=False)
         print(f"[SUCCESS] Updated {path} ({os.path.getsize(path):,} bytes)")
 
-print("\nAll 5,276 loans successfully ingested and synced across the workspace!")
+print("\nAll 5,276 loans successfully ingested and strictly verified for 0 NaNs!")
