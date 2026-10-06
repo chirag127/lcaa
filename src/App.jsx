@@ -297,7 +297,7 @@ export default function App() {
                 No Loans Match the Selected Filters
               </h3>
               <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', maxWidth: '480px', margin: '0 auto 1.5rem' }}>
-                Try loosening your filter criteria or click the reset button below to restore the complete portfolio dataset of 3,967 loans.
+                Try loosening your filter criteria or click the reset button below to restore the complete portfolio dataset of 5,276 loans.
               </p>
               <button
                 onClick={handleResetFilters}

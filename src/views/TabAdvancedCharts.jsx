@@ -433,7 +433,7 @@ export default function TabAdvancedCharts({ data, isDark = false }) {
           Master Chart Architectures & Visual Analytics Matrix
         </h2>
         <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: '4px 0 0 0' }}>
-          Every standard quantitative visualization archetype mapped strictly to the 3,967 empirical investor loans.
+          Every standard quantitative visualization archetype mapped strictly to all 5,276 empirical investor loans.
         </p>
       </div>
 

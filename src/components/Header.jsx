@@ -2,35 +2,44 @@ import React from 'react';
 import { formatINRCompact, formatPercent } from '../utils/formatters';
 
 export default function Header({ kpis, theme = 'light', onToggleTheme }) {
-  const anr = kpis?.official_closed_anr ?? 16.91;
-  const disbursed = kpis?.total_disbursed ?? 2869500;
-  const pos = kpis?.principal_outstanding ?? 738856;
-  const npaRate = kpis?.total_disbursed ? ((kpis.npa_amount / kpis.total_disbursed) * 100) : 3.09;
+  const anr = kpis?.annualized_net_return_pct ?? 32.86;
+  const roi = kpis?.overall_roi_pct ?? 5.80;
+  const npaRate = kpis?.npa_rate_pct ?? 8.37;
+  const strictDpd = kpis?.strict_zero_tolerance_delinquency_pct ?? 4.02;
+  const prepayRate = kpis?.prepayment_rate_pct ?? 50.75;
+  const disbursed = kpis?.total_amount_lent ?? 3208500;
+  const pos = kpis?.total_principal_outstanding_active ?? 753845.58;
 
   return (
     <header className="app-header">
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
         <div className="brand-badge">LDC</div>
         <div>
-          <h1 className="brand-title">LenDenClub Portfolio Analytics & Algorithmic Decision Engine</h1>
-          <p className="brand-subtitle">Manual Lending Intelligence Platform &bull; 3,967 Loans Analyzed &bull; ₹2.87M Capital Deployed</p>
+          <h1 className="brand-title">LenDenClub Portfolio Analytics & Algorithmic Underwriting Engine</h1>
+          <p className="brand-subtitle">
+            100% Rate & Percentage Analytics &bull; 5,276 Loans (2,492 Active + 2,784 Closed) &bull; Zero Absolute Bias
+          </p>
         </div>
       </div>
       
       <div className="header-pills">
-        <div className="stat-pill success">
-          <span style={{ color: 'var(--text-muted)' }}>Closed ANR:</span>
+        <div className="stat-pill success" title="Annualized Net Return across closed loans">
+          <span style={{ color: 'var(--text-muted)' }}>Net ANR:</span>
           <strong>{formatPercent(anr)}</strong>
         </div>
-        <div className="stat-pill info">
-          <span style={{ color: 'var(--text-muted)' }}>Total Lent:</span>
-          <strong>{formatINRCompact(disbursed)}</strong>
+        <div className="stat-pill success" title="Percentage of closed loans that prepaid early">
+          <span style={{ color: 'var(--text-muted)' }}>Prepay Rate:</span>
+          <strong>{formatPercent(prepayRate)}</strong>
         </div>
-        <div className="stat-pill warning">
-          <span style={{ color: 'var(--text-muted)' }}>Active POS:</span>
-          <strong>{formatINRCompact(pos)}</strong>
+        <div className="stat-pill info" title="Realized net profit percentage on disbursed capital">
+          <span style={{ color: 'var(--text-muted)' }}>Realized ROI:</span>
+          <strong>{formatPercent(roi)}</strong>
         </div>
-        <div className="stat-pill danger">
+        <div className="stat-pill warning" title="Strict Zero-Tolerance: Loans with any DPD >= 1 day">
+          <span style={{ color: 'var(--text-muted)' }}>Strict DPD (1+):</span>
+          <strong>{formatPercent(strictDpd)}</strong>
+        </div>
+        <div className="stat-pill danger" title="Regulatory 90+ DPD NPA rate">
           <span style={{ color: 'var(--text-muted)' }}>NPA Rate:</span>
           <strong>{formatPercent(npaRate)}</strong>
         </div>

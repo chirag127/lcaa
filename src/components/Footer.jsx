@@ -2,9 +2,14 @@ import React from 'react';
 import { formatINR, formatPercent } from '../utils/formatters';
 
 export default function Footer({ kpis }) {
-  const totalLent = kpis?.total_disbursed ?? 2869500;
-  const closedAnr = kpis?.official_closed_anr ?? 16.91;
-  const realizedProfit = kpis?.realized_net_profit ?? 122117;
+  const totalLent = kpis?.total_amount_lent ?? 3208500;
+  const closedAnr = kpis?.annualized_net_return_pct ?? 32.86;
+  const realizedProfit = kpis?.total_net_profit ?? 118836.13;
+  const totalLoans = kpis?.total_loans ?? 5276;
+  const activeLoans = kpis?.active_loans ?? 2492;
+  const closedLoans = kpis?.closed_loans ?? 2784;
+  const npaLoans = kpis?.npa_loans ?? 233;
+  const npaRate = kpis?.npa_rate_pct ?? 8.37;
 
   return (
     <footer className="app-footer">
@@ -21,7 +26,7 @@ export default function Footer({ kpis }) {
           
           <div className="footer-status-pill">
             <span className="pulse-indicator"></span>
-            <span>Analytics Engine Active &bull; 3,967 Loans Synchronized</span>
+            <span>Analytics Engine Active &bull; 5,276 Loans Synchronized (100% Rate-Based)</span>
           </div>
         </div>
 
@@ -30,24 +35,24 @@ export default function Footer({ kpis }) {
           <div className="footer-metric-card">
             <span className="footer-metric-label">Total Capital Lent</span>
             <strong className="footer-metric-val">{formatINR(totalLent)}</strong>
-            <span className="footer-metric-sub">3,967 empirical loans</span>
+            <span className="footer-metric-sub">{totalLoans.toLocaleString()} empirical loans</span>
           </div>
 
           <div className="footer-metric-card">
             <span className="footer-metric-label">Loan Resolution Split</span>
-            <strong className="footer-metric-val">2,396 Closed &bull; 1,385 Active</strong>
-            <span className="footer-metric-sub">149 NPA (3.09%) &bull; 37 Cancelled</span>
+            <strong className="footer-metric-val">{closedLoans.toLocaleString()} Closed &bull; {activeLoans.toLocaleString()} Active</strong>
+            <span className="footer-metric-sub">{npaLoans} NPA ({formatPercent(npaRate)})</span>
           </div>
 
           <div className="footer-metric-card">
             <span className="footer-metric-label">Official Closed ANR</span>
             <strong className="footer-metric-val success">{formatPercent(closedAnr)}</strong>
-            <span className="footer-metric-sub">+₹1.22L Net Realized Profit</span>
+            <span className="footer-metric-sub">+{formatINR(realizedProfit)} Net Realized Profit</span>
           </div>
 
           <div className="footer-metric-card">
             <span className="footer-metric-label">Analytical Surfaces</span>
-            <strong className="footer-metric-val cyan">100 Charts &bull; 108 Insights</strong>
+            <strong className="footer-metric-val cyan">100+ Charts &bull; 108 Insights</strong>
             <span className="footer-metric-sub">10 2D Matrices &bull; Live Loan Engine</span>
           </div>
         </div>
@@ -62,7 +67,7 @@ export default function Footer({ kpis }) {
           </div>
 
           <p className="footer-disclaimer">
-            Confidential proprietary algorithmic underwriting model. Backtested on empirical investor loan performance from Platform Inception to Present.
+            Confidential proprietary algorithmic underwriting model. Backtested on empirical investor loan performance across all 5,276 loans.
           </p>
 
           <div className="footer-copyright">

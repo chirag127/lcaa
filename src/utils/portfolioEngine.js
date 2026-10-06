@@ -594,19 +594,19 @@ export function computeDynamicPortfolio(loans = [], baseData = {}) {
   // 7. Active Delinquency Scenarios (TabDelinquency)
   const active_scenarios = [
     {
-      scenario: 'Base (Current Curve)',
+      scenario: 'Base Case (Current)',
+      projected_npa_loss: Math.round(activePOS * 0.0165),
+      projected_ann_net: 32.86
+    },
+    {
+      scenario: 'Mild Stress (50% DPD Loss)',
       projected_npa_loss: Math.round(activePOS * 0.038),
-      projected_ann_net: 20.8
+      projected_ann_net: 31.40
     },
     {
-      scenario: 'Mild Stress (+25% DPD Spill)',
-      projected_npa_loss: Math.round(activePOS * 0.058),
-      projected_ann_net: 17.2
-    },
-    {
-      scenario: 'Severe Stress (+60% DPD Spill)',
-      projected_npa_loss: Math.round(activePOS * 0.092),
-      projected_ann_net: 11.5
+      scenario: 'Severe Stress (100% DPD Loss)',
+      projected_npa_loss: Math.round(activePOS * 0.063),
+      projected_ann_net: 29.85
     }
   ];
 

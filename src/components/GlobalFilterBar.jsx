@@ -252,7 +252,7 @@ export default function GlobalFilterBar({
             cursor: 'pointer'
           }}
         >
-          All 3,967 Loans
+          All 5,276 Loans
         </button>
         <button
           onClick={() => applyPreset('BLUEPRINT')}

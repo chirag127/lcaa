@@ -31,7 +31,9 @@ function buildBucketStats(loans, classifier) {
     if (l.npa) b.npa++;
   }
   // Compute derived metrics
+  const total = loans.length || 1;
   for (const b of Object.values(buckets)) {
+    b.pct = b.count > 0 ? (b.count / total * 100) : 0;
     b.npa_pct = b.count > 0 ? (b.npa / b.count * 100) : 0;
     b.margin_pct = b.disbursed > 0 ? (b.profit / b.disbursed * 100) : 0;
     b.avg_amount = b.count > 0 ? (b.disbursed / b.count) : 0;
