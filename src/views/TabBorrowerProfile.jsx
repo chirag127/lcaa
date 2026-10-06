@@ -531,6 +531,16 @@ export default function TabBorrowerProfile({ data, isDark = false }) {
             metrics={[{ label: 'NACH Share', value: '100.0%' }, { label: 'Filterable', value: 'No (Backend)' }, { label: 'UI Equivalent', value: 'Repayment Type' }]}
             directive="MANDATE: Understand that Default Repayment Mode is non-filterable. Filter by 'Repayment Type: Monthly EMI' instead."
           />
+          <InsightCard id="B19" type="green" badge="PREPAYMENT CHAMPIONS" title="3-Month Micro-Loans: 69.1% Prepayment & 37.8% ANR"
+            body="Across all 2,784 closed loans, 50.75% prepaid or closed early with annualized net return ≥ 36.0%. 3-Month loans led the entire marketplace with an extraordinary 69.1% prepayment rate, turning over invested principal in ~40 days while retaining full fees and interest."
+            metrics={[{ label: '3M Prepay Rate', value: '69.1%' }, { label: 'Avg Ann. Return', value: '37.8%' }, { label: 'Capital Velocity', value: '4.0x/yr' }]}
+            directive="MANDATE: Maximum allocation to 3-Month loans for rapid capital rotation, compounding, and high liquidity."
+          />
+          <InsightCard id="B20" type="red" badge="ZERO-TOLERANCE DPD" title="1+ DPD Warning: 94.2% of Severe Delinquencies Become Total Loss"
+            body="Empirical surveillance proves that 0 DPD loans generated +₹2,11,599 in cumulative net profit with zero capital loss. However, loans with even 1-30 DPD show high recidivism, and loans crossing 60 DPD suffer a 94.2% roll-rate into complete write-off. Under zero-tolerance underwriting, any DPD > 0 must be treated as toxic."
+            metrics={[{ label: '0 DPD Profit', value: '+₹2.12L' }, { label: '60+ DPD Loss Rate', value: '94.2%' }, { label: 'Tolerance', value: '0 Days' }]}
+            directive="MANDATE: Reject any borrower with previous DPD > 0. Filter exclusively for Current (0 DPD) performing loans."
+          />
         </div>
       </div>
     </div>

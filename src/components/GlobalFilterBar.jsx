@@ -13,15 +13,17 @@ export const INITIAL_FILTERS = {
   ageBracket: 'ALL', // 'ALL' | '21-25' | '26-35' | '36-45' | '>45'
   ticketTier: 'ALL', // 'ALL' | '₹250' | '₹500' | '₹750-1000' | '₹1250-2000' | '₹2500-4000'
   status: 'ALL', // 'ALL' | 'CLOSED' | 'ACTIVE' | 'NPA' | 'CANCELLED'
-  dpdStage: 'ALL' // 'ALL' | 'Current' | 'Stage 1' | 'Stage 2' | 'Stage 3' | 'NPA'
+  dpdStage: 'ALL', // 'ALL' | 'Current' | 'Stage 1' | 'Stage 2' | 'Stage 3' | 'NPA' | 'Strict 0 DPD' | 'Strict Delinquent (1+ DPD)'
+  scoreTier: 'ALL', // 'ALL' | '<700' | '700-729' | '730-759' | '760-779' | '780+'
+  prepaymentStatus: 'ALL' // 'ALL' | 'PREPAID' | 'FULL_TERM'
 };
 
 export default function GlobalFilterBar({
   filters,
   onFilterChange,
   onResetFilters,
-  totalLoansCount = 3967,
-  filteredLoansCount = 3967,
+  totalLoansCount = 5276,
+  filteredLoansCount = 5276,
   kpis = {}
 }) {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -39,7 +41,9 @@ export default function GlobalFilterBar({
     filters.ageBracket !== 'ALL',
     filters.ticketTier !== 'ALL',
     filters.status !== 'ALL',
-    filters.dpdStage !== 'ALL'
+    filters.dpdStage !== 'ALL',
+    filters.scoreTier && filters.scoreTier !== 'ALL',
+    filters.prepaymentStatus && filters.prepaymentStatus !== 'ALL'
   ].filter(Boolean).length;
 
   const isFiltered = activeFilterCount > 0;
@@ -109,6 +113,25 @@ export default function GlobalFilterBar({
         onFilterChange({
           ...INITIAL_FILTERS,
           ticketTier: '₹250'
+        });
+        break;
+      case 'ZERO_TOLERANCE':
+        onFilterChange({
+          ...INITIAL_FILTERS,
+          dpdStage: 'Strict 0 DPD'
+        });
+        break;
+      case 'PREPAYMENT_CHAMPIONS':
+        onFilterChange({
+          ...INITIAL_FILTERS,
+          prepaymentStatus: 'PREPAID',
+          tenures: ['2', '3']
+        });
+        break;
+      case 'STRICT_DELINQUENT':
+        onFilterChange({
+          ...INITIAL_FILTERS,
+          dpdStage: 'Strict Delinquent (1+ DPD)'
         });
         break;
       case 'RESET':
@@ -335,6 +358,51 @@ export default function GlobalFilterBar({
           }}
         >
           ₹250 Tickets Only
+        </button>
+        <button
+          onClick={() => applyPreset('ZERO_TOLERANCE')}
+          style={{
+            padding: '0.25rem 0.6rem',
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            borderRadius: '4px',
+            background: filters.dpdStage === 'Strict 0 DPD' ? 'var(--emerald)' : 'var(--bg-elevated)',
+            color: filters.dpdStage === 'Strict 0 DPD' ? '#FFFFFF' : 'var(--text-secondary)',
+            border: '1px solid var(--border-subtle)',
+            cursor: 'pointer'
+          }}
+        >
+          🛡️ Strict 0 DPD Only
+        </button>
+        <button
+          onClick={() => applyPreset('PREPAYMENT_CHAMPIONS')}
+          style={{
+            padding: '0.25rem 0.6rem',
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            borderRadius: '4px',
+            background: filters.prepaymentStatus === 'PREPAID' ? 'var(--purple)' : 'var(--bg-elevated)',
+            color: filters.prepaymentStatus === 'PREPAID' ? '#FFFFFF' : 'var(--text-secondary)',
+            border: '1px solid var(--border-subtle)',
+            cursor: 'pointer'
+          }}
+        >
+          ⚡ Prepayment Champions (36%+ ANR)
+        </button>
+        <button
+          onClick={() => applyPreset('STRICT_DELINQUENT')}
+          style={{
+            padding: '0.25rem 0.6rem',
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            borderRadius: '4px',
+            background: filters.dpdStage === 'Strict Delinquent (1+ DPD)' ? 'var(--crimson)' : 'var(--bg-elevated)',
+            color: filters.dpdStage === 'Strict Delinquent (1+ DPD)' ? '#FFFFFF' : 'var(--text-secondary)',
+            border: '1px solid var(--border-subtle)',
+            cursor: 'pointer'
+          }}
+        >
+          ⚠️ 1+ DPD Delinquent Risk
         </button>
       </div>
 
@@ -638,7 +706,7 @@ export default function GlobalFilterBar({
             </select>
           </div>
 
-          {/* 11. DPD Stage */}
+          {/* 11. DPD Stage (Strict Zero-Tolerance vs Standard) */}
           <div>
             <label style={{ display: 'block', fontSize: '0.74rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '0.35rem', textTransform: 'uppercase' }}>
               Delinquency Stage (DPD)
@@ -657,11 +725,64 @@ export default function GlobalFilterBar({
               }}
             >
               <option value="ALL">All DPD Stages</option>
-              <option value="Current">Current (0 DPD)</option>
+              <option value="Strict 0 DPD">🛡️ Strict 0 DPD (Always On-Time)</option>
+              <option value="Strict Delinquent (1+ DPD)">⚠️ 1+ DPD (Strict Toxic / Any Delay)</option>
+              <option value="Current">Current (0 DPD Standard)</option>
               <option value="Stage 1">Stage 1 (1 to 30 DPD)</option>
               <option value="Stage 2">Stage 2 (31 to 60 DPD)</option>
               <option value="Stage 3">Stage 3 (61 to 90 DPD)</option>
               <option value="NPA">NPA Default (90+ DPD)</option>
+            </select>
+          </div>
+
+          {/* 12. LenDenClub Score Bracket */}
+          <div>
+            <label style={{ display: 'block', fontSize: '0.74rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '0.35rem', textTransform: 'uppercase' }}>
+              LenDenClub Credit Score
+            </label>
+            <select
+              value={filters.scoreTier || 'ALL'}
+              onChange={e => setFieldValue('scoreTier', e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.45rem 0.65rem',
+                background: 'var(--bg-elevated)',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '6px',
+                color: 'var(--text-primary)',
+                fontSize: '0.78rem'
+              }}
+            >
+              <option value="ALL">All Score Brackets</option>
+              <option value="780+">780+ (Super Prime / Lowest Loss)</option>
+              <option value="760-779">760 to 779 (Prime Grade)</option>
+              <option value="730-759">730 to 759 (Moderate Risk)</option>
+              <option value="700-729">700 to 729 (High Volume / Subprime)</option>
+              <option value="<700">&lt; 700 (Very High Delinquency)</option>
+            </select>
+          </div>
+
+          {/* 13. Prepayment & Velocity */}
+          <div>
+            <label style={{ display: 'block', fontSize: '0.74rem', fontWeight: 800, color: 'var(--text-muted)', marginBottom: '0.35rem', textTransform: 'uppercase' }}>
+              Capital Velocity / Prepayment
+            </label>
+            <select
+              value={filters.prepaymentStatus || 'ALL'}
+              onChange={e => setFieldValue('prepaymentStatus', e.target.value)}
+              style={{
+                width: '100%',
+                padding: '0.45rem 0.65rem',
+                background: 'var(--bg-elevated)',
+                border: '1px solid var(--border-subtle)',
+                borderRadius: '6px',
+                color: 'var(--text-primary)',
+                fontSize: '0.78rem'
+              }}
+            >
+              <option value="ALL">All Repayment Modes</option>
+              <option value="PREPAID">⚡ Prepaid Only (Rapid Turnover ≥ 36% ANR)</option>
+              <option value="FULL_TERM">Full Term Standard Repayment</option>
             </select>
           </div>
         </div>

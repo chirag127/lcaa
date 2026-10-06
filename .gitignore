@@ -19,4 +19,5 @@ scratch/
 *.log
 borrower_details_master*.json
 all_4000_borrower_details*.json
+lendenclub_loans_*.json
 user_request_*.txt

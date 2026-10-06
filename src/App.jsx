@@ -171,11 +171,39 @@ export default function App() {
       });
     }
 
-    // 12. DPD Stage
+    // 12. DPD Stage (Strict Zero-Tolerance vs Standard Staging)
     if (filters.dpdStage !== 'ALL') {
+      if (filters.dpdStage === 'Strict 0 DPD') {
+        list = list.filter(l => safeNum(l.dpd) === 0);
+      } else if (filters.dpdStage === 'Strict Delinquent (1+ DPD)') {
+        list = list.filter(l => safeNum(l.dpd) > 0);
+      } else {
+        list = list.filter(l => {
+          const stage = getDpdStage(l.dpd);
+          return stage.includes(filters.dpdStage);
+        });
+      }
+    }
+
+    // 13. LenDenClub Score Bracket
+    if (filters.scoreTier && filters.scoreTier !== 'ALL') {
       list = list.filter(l => {
-        const stage = getDpdStage(l.dpd);
-        return stage.includes(filters.dpdStage);
+        const sc = safeNum(l.score);
+        if (filters.scoreTier === '<700') return sc < 700;
+        if (filters.scoreTier === '700-729') return sc >= 700 && sc < 730;
+        if (filters.scoreTier === '730-759') return sc >= 730 && sc < 760;
+        if (filters.scoreTier === '760-779') return sc >= 760 && sc < 780;
+        if (filters.scoreTier === '780+') return sc >= 780;
+        return true;
+      });
+    }
+
+    // 14. Capital Velocity / Prepayment Status
+    if (filters.prepaymentStatus && filters.prepaymentStatus !== 'ALL') {
+      list = list.filter(l => {
+        if (filters.prepaymentStatus === 'PREPAID') return l.prepaid === true;
+        if (filters.prepaymentStatus === 'FULL_TERM') return !l.prepaid;
+        return true;
       });
     }
 
@@ -199,7 +227,7 @@ export default function App() {
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-6 text-center">
         <div className="w-12 h-12 border-4 border-emerald-500/20 border-t-emerald-600 rounded-full animate-spin mb-4"></div>
         <h2 className="text-xl font-bold text-slate-800 dark:text-white tracking-wide">Loading Portfolio Intelligence Engine...</h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Ingesting 3,967 loans, 10 2D heatmaps, and 100+ institutional analytics matrices with Apache ECharts</p>
+        <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Ingesting 5,276 loans (2,492 Active + 2,784 Closed), 10 2D heatmaps, and 100+ institutional analytics matrices with Apache ECharts</p>
       </div>
     );
   }
@@ -222,7 +250,7 @@ export default function App() {
   }
 
   const activeLoanCount = filteredLoans.length;
-  const totalLoanCount = data.loans ? data.loans.length : 3967;
+  const totalLoanCount = data.loans ? data.loans.length : 5276;
 
   return (
     <div className="app-container">
