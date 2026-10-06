@@ -48,11 +48,24 @@ export default function App() {
   useEffect(() => {
     async function loadLendingData() {
       try {
-        const res = await fetch('./lending_data.json');
+        // Cache bust query string ensures no stale browser/CDN cache
+        const res = await fetch(`./lending_data.json?t=${Date.now()}`);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
-        const json = await res.json();
+        const text = await res.text();
+        let json;
+        try {
+          json = JSON.parse(text);
+        } catch (parseErr) {
+          // Bulletproof fallback: sanitize any unquoted NaN/Infinity
+          console.warn('Sanitizing raw lending_data.json payload...', parseErr);
+          const sanitized = text
+            .replace(/:\s*NaN\b/g, ': null')
+            .replace(/:\s*Infinity\b/g, ': null')
+            .replace(/:\s*-Infinity\b/g, ': null');
+          json = JSON.parse(sanitized);
+        }
         setData(json);
       } catch (err) {
         console.error('Failed to load lending_data.json:', err);
